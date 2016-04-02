@@ -1,4 +1,4 @@
-package fatec.com.digital_library.model;
+package fatec.com.digital_library.entity;
 
 import java.sql.Date;
 import java.util.List;

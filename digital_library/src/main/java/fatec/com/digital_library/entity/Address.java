@@ -1,9 +1,9 @@
-package fatec.com.digital_library.model;
+package fatec.com.digital_library.entity;
 
 public class Address {
 
 	private String streetName;
-	private String buildingNumber;
+	private Integer buildingNumber;
 
 	public String getStreetName() {
 		return streetName;
@@ -13,11 +13,11 @@ public class Address {
 		this.streetName = streetName;
 	}
 
-	public String getBuildingNumber() {
+	public Integer getBuildingNumber() {
 		return buildingNumber;
 	}
 
-	public void setBuildingNumber(String buildingNumber) {
+	public void setBuildingNumber(Integer buildingNumber) {
 		this.buildingNumber = buildingNumber;
 	}
 

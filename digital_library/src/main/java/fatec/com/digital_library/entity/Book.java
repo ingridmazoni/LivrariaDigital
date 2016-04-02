@@ -1,12 +1,14 @@
-package fatec.com.digital_library.model;
+package fatec.com.digital_library.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class Book {
 
 	private String title;
-	private Autor autor;
 	private String format;
+	private List<Autor> autorList;
+	private String isbn;
 	private Editor editor;
 	private Short pageNumber;
 	private Date publicationDate;
@@ -16,6 +18,19 @@ public class Book {
 	private Integer stockQuantity;
 	private Double costPrice;
 	private Double profitMargin;
+	private Category category;
+
+	public List<Autor> getAutorList() {
+		return autorList;
+	}
+
+	public void setAutorList(List<Autor> autorList) {
+		this.autorList = autorList;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
 
 	public String getTitle() {
 		return title;
@@ -23,14 +38,6 @@ public class Book {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public Autor getAutor() {
-		return autor;
-	}
-
-	public void setAutor(Autor autor) {
-		this.autor = autor;
 	}
 
 	public String getFormat() {
@@ -107,6 +114,22 @@ public class Book {
 
 	public void setProfitMargin(Double profitMargin) {
 		this.profitMargin = profitMargin;
+	}
+
+	public String getIsbn() {
+		return isbn;
+	}
+
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 }
