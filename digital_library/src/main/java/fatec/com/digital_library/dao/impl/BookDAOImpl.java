@@ -111,9 +111,7 @@ public class BookDAOImpl implements BookDAO {
 				
 				if (ps.executeUpdate() > 0) {
 					ps.close();
-					System.out.println("antes do commit");
 					con.commit();
-					System.out.println("deps do commit");
 					con.close();
 					return true;
 				} else {
