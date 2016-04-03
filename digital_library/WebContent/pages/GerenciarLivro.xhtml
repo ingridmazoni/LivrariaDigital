@@ -12,11 +12,11 @@
 	<title>Gerenciamento de Livro</title>
 </h:head>
 <h:body>
-	<p:growl id="growl" life="2000" />
 	<p:tabView>
 		<p:tab title="Cadastrar_livro">
 			<h:form id="Cadastrar">
 				<p:layout style="min-width:200px;min-height:700px;">
+				  <p:growl id="growl" life="2000" />
 					<p:layoutUnit position="west" resizable="true" size="600"
 						minSize="600" maxSize="600">
 						<h:panelGrid columns="2" cellpadding="10">
@@ -135,7 +135,7 @@
 						<p:column headerText="Remover">
 							<p:commandButton value="Remover" style="margin-left: 40%" icon="ui-icon-trash"
 								actionListener="#{bookControl.removeBook(book)}"
-								update="book_table growl" />
+								update="book_table" />
 						</p:column>
 					</p:dataTable>
 				</h:panelGrid>
