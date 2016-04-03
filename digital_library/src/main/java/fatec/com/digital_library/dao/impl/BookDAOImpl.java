@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import fatec.com.digital_library.dao.BookDAO;
 import fatec.com.digital_library.entity.Autor;
 import fatec.com.digital_library.entity.Book;
+import fatec.com.digital_library.entity.Category;
 import fatec.com.digital_library.utility.DatabaseConnection;
 
 public class BookDAOImpl implements BookDAO {
@@ -29,8 +30,8 @@ public class BookDAOImpl implements BookDAO {
 		System.out.println("FOI");
 		builder.append("INSERT INTO library.book( ");
 		builder.append("title, format, editor_fk, page_number, publication_date, summary, idx, sale_price, ");
-		builder.append("stock, cost_price, profit_margin, category_fk, isbn) ");
-		builder.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		builder.append("stock, cost_price, profit_margin, isbn) ");
+		builder.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		dml = builder.toString();
 
 		try {
@@ -44,19 +45,25 @@ public class BookDAOImpl implements BookDAO {
 			ps.setDate(5, sqlDate);
 			ps.setString(6, book.getSummary());
 			ps.setString(7, book.getIndex());
-			ps.setDouble(8,  book.getSalePrice());
+			ps.setDouble(8, book.getSalePrice());
 			ps.setInt(9, book.getStockQuantity());
 			ps.setDouble(10, book.getCostPrice());
 			ps.setDouble(11, book.getProfitMargin());
-			ps.setString(12, book.getCategory().getCategory());
-			ps.setString(13, book.getIsbn());
+			ps.setString(12, book.getIsbn());
 			
 			if (ps.executeUpdate() > 0) {
 				ps.close();
 				con.commit();
 				con.close();
 				if (addAutorsForBook(book)) {
-					return true;
+					if (addCategoriesForBook(book)){
+						return true;
+					} else {
+						ps.close();
+						con.rollback();
+						con.close();
+						return false;
+					}
 				} else {
 					ps.close();
 					con.rollback();
@@ -126,6 +133,47 @@ public class BookDAOImpl implements BookDAO {
 				e.printStackTrace();
 			}
 		}
+		return false;
+	}
+	
+	public boolean addCategoriesForBook(Book book) {
+		DatabaseConnection dbCon;
+		dbCon = new DatabaseConnection();
+		Connection con = dbCon.getConnection();
+		PreparedStatement ps;
+		for (Category category : book.getCategory()) {
+			builder = new StringBuilder();
+			builder.append("INSERT INTO library.book_category (book_fk, category_fk) ");
+			builder.append("VALUES((SELECT book_id FROM library.book");
+			builder.append("          WHERE title = ?) ");
+			builder.append("     , (SELECT category_id FROM library.category ");
+			builder.append("          WHERE category_name = ?))");
+			
+			String dml = builder.toString();
+			
+			try {
+				con.setAutoCommit(false);
+				ps = con.prepareStatement(dml);
+				ps.setString(1, book.getTitle());
+				ps.setString(2, category.getCategory());
+				
+				if (ps.executeUpdate() > 0) {
+					ps.close();
+					con.commit();
+					con.close();
+					return true;
+				} else {
+					ps.close();
+					con.rollback();
+					con.close();
+					return false;
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}		
+		
 		return false;
 	}
 	

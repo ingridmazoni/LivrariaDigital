@@ -18,7 +18,7 @@ public class Book {
 	private Integer stockQuantity;
 	private Double costPrice;
 	private Double profitMargin;
-	private Category category;
+	private List<Category> category;
 
 	public List<Autor> getAutorList() {
 		return autorList;
@@ -124,11 +124,11 @@ public class Book {
 		this.isbn = isbn;
 	}
 
-	public Category getCategory() {
+	public List<Category> getCategory() {
 		return category;
 	}
 
-	public void setCategory(Category category) {
+	public void setCategory(List<Category> category) {
 		this.category = category;
 	}
 

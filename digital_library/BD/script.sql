@@ -33,8 +33,9 @@ CREATE TABLE library.autor (
 );
 
 CREATE TABLE library.category(
-  category_name VARCHAR(100),
-  PRIMARY KEY(category_name)
+  category_id INTEGER,
+  category_name VARCHAR(500),
+  PRIMARY KEY(category_id)
 );
 
 CREATE TABLE library.book (
@@ -50,7 +51,7 @@ CREATE TABLE library.book (
   sale_price INTEGER NOT NULL,
   cost_price INTEGER NOT NULL,
   profit_margin INTEGER NOT NULL,
-  category_fk VARCHAR(100) NOT NULL,
+  category_fk INTEGER NOT NULL,
   isbn VARCHAR(100) NOT NULL,
   PRIMARY KEY (book_id)
 );
@@ -65,6 +66,23 @@ ALTER TABLE library.book
     FOREIGN KEY(category_fk)
     REFERENCES library.category(category_id);    
 
+CREATE TABLE library.book_category(
+  book_category_id INTEGER AUTO_INCREMENT,
+  book_fk INTEGER NOT NULL,
+  category_fk INTEGER NOT NULL,
+  PRIMARY KEY (book_category_id)
+); 
+
+ALTER TABLE library.book_category
+    ADD CONSTRAINT book_category_book_fk
+    FOREIGN KEY(book_fk)
+    REFERENCES library.book(book_id);
+    
+ALTER TABLE library.book_category
+    ADD CONSTRAINT book_category_category_fk
+    FOREIGN KEY(category_fk)
+    REFERENCES library.book(category_id);
+    
 CREATE TABLE library.book_autor (
   book_autor_id INTEGER AUTO_INCREMENT,
   book_fk INTEGER NOT NULL,
