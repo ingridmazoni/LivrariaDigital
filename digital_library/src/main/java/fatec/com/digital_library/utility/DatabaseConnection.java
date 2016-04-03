@@ -12,10 +12,10 @@ public class DatabaseConnection {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
-			String serverName = "192.168.1.108";
+			String serverName = "192.168.1.105";
 			String mydatabase = "library";
 			String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
-			String username = "root";
+			String username = "library";
 			String password = "welcome1";
 			
 			connection = DriverManager.getConnection(url, username, password);

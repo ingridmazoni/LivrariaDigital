@@ -4,6 +4,33 @@ public class Address {
 
 	private String streetName;
 	private Integer buildingNumber;
+	private String areaCode;
+	private String state;
+	private String city;
+
+	public String getAreaCode() {
+		return areaCode;
+	}
+
+	public void setAreaCode(String areaCode) {
+		this.areaCode = areaCode;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
 
 	public String getStreetName() {
 		return streetName;
