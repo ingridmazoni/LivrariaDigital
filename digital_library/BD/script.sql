@@ -71,7 +71,7 @@ CREATE TABLE library.book (
   cost_price INTEGER NOT NULL,
   profit_margin INTEGER NOT NULL,
   isbn VARCHAR(100) NOT NULL,
-  cover_directory VARCHAR(100),
+  cover_directory VARCHAR(1000),
   CONSTRAINT book_isbn_un UNIQUE (isbn),
   PRIMARY KEY (book_id)
 );

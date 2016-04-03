@@ -11,6 +11,7 @@ import fatec.com.digital_library.dao.BookDAO;
 import fatec.com.digital_library.entity.Autor;
 import fatec.com.digital_library.entity.Book;
 import fatec.com.digital_library.entity.Category;
+import fatec.com.digital_library.entity.Editor;
 import fatec.com.digital_library.utility.DatabaseConnection;
 
 public class BookDAOImpl implements BookDAO {
@@ -119,13 +120,57 @@ public class BookDAOImpl implements BookDAO {
 	}
 
 	@Override
-	public boolean fetchBooks() {
-		return false;
+	public List<Book> fetchBooks() {
+		DatabaseConnection dbCon;
+		PreparedStatement ps;
+		Connection con;
+		ResultSet rs;
+		dbCon = new DatabaseConnection();
+		builder = new StringBuilder();
+		con = dbCon.getConnection();
+		ArrayList<Book> bookList = new ArrayList<Book>();
+		
+		builder.append("SELECT isbn, title, format, editor_fk, page_number, publication_date, summary, idx, stock, sale_price, cost_price, profit_margin, cover_directory FROM library.book");
+		query = builder.toString();
+		
+		try {
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				Book book = new Book();
+				Editor editor = new Editor();
+				book.setIsbn(rs.getString(1));
+				book.setTitle(rs.getString(2));
+				book.setFormat(rs.getString(3));
+				editor.setName(rs.getString(4));
+				book.setEditor(editor);
+				book.setPageNumber(rs.getShort(5));
+				java.util.Date javaDate = new java.sql.Date(rs.getDate(6).getTime());
+				book.setPublicationDate(javaDate);
+				book.setSummary(rs.getString(7));
+				book.setIndex(rs.getString(8));
+				book.setStockQuantity(rs.getInt(9));
+				book.setSalePrice(rs.getDouble(10));
+				book.setCostPrice(rs.getDouble(11));
+				book.setProfitMargin(rs.getDouble(12));
+				book.setCoverDirectory(rs.getString(13));
+				bookList.add(book);
+			}
+			ps.close();
+			rs.close();
+			con.close();
+			return bookList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public boolean addAutorsForBook(Book book) {
 		PreparedStatement ps = null;
-		ResultSet rs = null;
 		try {
 			DatabaseConnection dbCon;
 			dbCon = new DatabaseConnection();

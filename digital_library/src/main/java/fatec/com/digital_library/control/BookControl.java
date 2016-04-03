@@ -26,6 +26,7 @@ import fatec.com.digital_library.entity.Editor;
 import fatec.com.digital_library.utility.DigitalLibraryConstants;
 
 @ManagedBean
+@RequestScoped
 public class BookControl implements Serializable {
 
 	private Book book = new Book();
@@ -41,8 +42,8 @@ public class BookControl implements Serializable {
 	private List<Autor> selectedAutors;
 	private List<Autor> autorList;
 	private String format;
-	private DigitalLibraryConstants constants;
 	private String condition;
+	private List<Book> bookList;
 	
 	@ManagedProperty("#{loader}")
 	private Loader loader;
@@ -52,9 +53,10 @@ public class BookControl implements Serializable {
 		editorList = loader.getEditorList();
 		categoryList = loader.getCategoryList();
 		autorList = loader.getAutorList();
+		bookList = loader.getBookList();
 	}
 
-	public void createBook(ActionEvent actionEvent) {
+	public void createBook() {
 		book.setEditor(editor);
         book.setCategory(selectCategoryList);
         book.setAutorList(autorList);
@@ -69,13 +71,18 @@ public class BookControl implements Serializable {
 
 	}
 
-	public void removeBook() {
-		if (bookDAO.removeBook(book)) {
-			message = DigitalLibraryConstants.REMOVE_BOOK_SUCCESS;
+	public void removeBook(Book book) {
+		System.out.println("teste");
+		if (!bookDAO.removeBook(book)) {
+			condition = DigitalLibraryConstants.ERROR;
+			addMessage(DigitalLibraryConstants.REMOVE_BOOK_FAILURE, condition);
 		} else {
-			message = DigitalLibraryConstants.REMOVE_BOOK_FAILURE;
+			bookList.remove(book);
 		}
-		System.out.println(message);
+	}
+	
+	public void refreshBookList(ActionEvent actionEvent) {
+		bookList = bookDAO.fetchBooks();
 	}
 
 	public List<Editor> completeEditor(String query) {
@@ -225,5 +232,15 @@ public class BookControl implements Serializable {
 	public void setFormat(String format) {
 		this.format = format;
 	}
+
+	public List<Book> getBookList() {
+		return bookList;
+	}
+
+	public void setBookList(List<Book> bookList) {
+		this.bookList = bookList;
+	}
+	
+	
 	
 }

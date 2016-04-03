@@ -19,6 +19,7 @@ public class Book {
 	private Double costPrice;
 	private Double profitMargin;
 	private List<Category> category;
+	private String coverDirectory;
 
 	public List<Autor> getAutorList() {
 		return autorList;
@@ -132,4 +133,12 @@ public class Book {
 		this.category = category;
 	}
 
+	public String getCoverDirectory() {
+		return coverDirectory;
+	}
+
+	public void setCoverDirectory(String coverDirectory) {
+		this.coverDirectory = coverDirectory;
+	}
+	
 }

@@ -16,6 +16,7 @@ import fatec.com.digital_library.dao.impl.BookDAOImpl;
 import fatec.com.digital_library.dao.impl.CategoryDAOImpl;
 import fatec.com.digital_library.dao.impl.EditorDAOImpl;
 import fatec.com.digital_library.entity.Autor;
+import fatec.com.digital_library.entity.Book;
 import fatec.com.digital_library.entity.Category;
 import fatec.com.digital_library.entity.Editor;
 import fatec.com.digital_library.utility.DigitalLibraryConstants;
@@ -26,11 +27,13 @@ public class Loader {
 	private EditorDAO editorDAO = new EditorDAOImpl();
 	private CategoryDAO categoryDAO = new CategoryDAOImpl();
 	private AutorDAO autorDAO = new AutorDAOImpl();
+	private BookDAO bookDAO = new BookDAOImpl();
 
 	private List<String> formatList;
 	private List<Editor> editorList;
 	private List<Category> categoryList;
 	private List<Autor> autorList;
+	private List<Book> bookList;
 
 	@PostConstruct
 	public void onLoad() {
@@ -38,6 +41,7 @@ public class Loader {
 		editorList = loadEditors();
 		categoryList = loadCategories();
 		autorList = loadAutors();
+		bookList = loadBooks();
 
 	}
 
@@ -58,6 +62,10 @@ public class Loader {
 
 	public List<Category> loadCategories() {
 		return categoryDAO.fetchAllCategories();
+	}
+
+	public List<Book> loadBooks() {
+		return bookDAO.fetchBooks();
 	}
 
 	public List<String> getFormatList() {
@@ -91,5 +99,15 @@ public class Loader {
 	public void setAutorList(List<Autor> autorList) {
 		this.autorList = autorList;
 	}
+
+	public List<Book> getBookList() {
+		return bookList;
+	}
+
+	public void setBookList(List<Book> bookList) {
+		this.bookList = bookList;
+	}
+	
+	
 
 }
