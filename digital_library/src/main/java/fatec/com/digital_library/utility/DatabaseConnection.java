@@ -11,14 +11,15 @@ public class DatabaseConnection {
 	public Connection getConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-
-			String serverName = "192.168.1.111";
+			String serverName = "localhost";
 			String mydatabase = "library";
 			String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
-			String username = "library";
-			String password = "welcome1";
+			String username = "root";
+			String password = "123456";
 			
 			connection = DriverManager.getConnection(url, username, password);
+			
+			System.out.println("Teste");
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -26,5 +27,10 @@ public class DatabaseConnection {
 			e.printStackTrace();
 		}
 		return connection;
+	}
+	
+	public static void main(String args[]){
+		DatabaseConnection dbcon= new DatabaseConnection();
+		dbcon.getConnection();
 	}
 }
