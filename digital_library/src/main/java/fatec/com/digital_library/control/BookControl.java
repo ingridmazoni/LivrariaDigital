@@ -14,6 +14,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.model.UploadedFile;
+
 import fatec.com.digital_library.dao.BookDAO;
 import fatec.com.digital_library.dao.EditorDAO;
 import fatec.com.digital_library.dao.impl.BookDAOImpl;
@@ -26,9 +28,14 @@ import fatec.com.digital_library.entity.Editor;
 import fatec.com.digital_library.utility.DigitalLibraryConstants;
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class BookControl implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2910868099436434247L;
+	private UploadedFile uploadedFile;
 	private Book book = new Book();
 	private Category category = new Category();
 	private Autor autor = new Autor();
@@ -44,7 +51,7 @@ public class BookControl implements Serializable {
 	private String format;
 	private String condition;
 	private List<Book> bookList;
-	
+
 	@ManagedProperty("#{loader}")
 	private Loader loader;
 
@@ -57,22 +64,28 @@ public class BookControl implements Serializable {
 	}
 
 	public void createBook() {
-		book.setEditor(editor);
-        book.setCategory(selectCategoryList);
-        book.setAutorList(autorList);
-        book.setFormat(format);
-		if (bookDAO.addBook(book)) {
-			condition = DigitalLibraryConstants.INFO;
-			addMessage(DigitalLibraryConstants.ADD_BOOK_SUCCESS, condition);
+		if (validate(editor, autor, book)) {
+			book.setEditor(editor);
+			book.setCategory(selectCategoryList);
+			book.setAutorList(autorList);
+			book.setFormat(format);
+			if (bookDAO.addBook(book)) {
+				condition = DigitalLibraryConstants.INFO;
+				addMessage(DigitalLibraryConstants.ADD_BOOK_SUCCESS, condition);
+			} else {
+				condition = DigitalLibraryConstants.ERROR;
+				addMessage(DigitalLibraryConstants.ADD_BOOK_FAILURE, condition);
+			}
+		}
+		if (uploadedFile != null) {
+			System.out.println("foi");
 		} else {
-			condition = DigitalLibraryConstants.ERROR;
-			addMessage(DigitalLibraryConstants.ADD_BOOK_FAILURE, condition);
+			System.out.println("n foi");
 		}
 
 	}
 
 	public void removeBook(Book book) {
-		System.out.println("teste");
 		if (!bookDAO.removeBook(book)) {
 			condition = DigitalLibraryConstants.ERROR;
 			addMessage(DigitalLibraryConstants.REMOVE_BOOK_FAILURE, condition);
@@ -80,8 +93,8 @@ public class BookControl implements Serializable {
 			bookList.remove(book);
 		}
 	}
-	
-	public void refreshBookList(ActionEvent actionEvent) {
+
+	public void refreshBookList() {
 		bookList = bookDAO.fetchBooks();
 	}
 
@@ -100,31 +113,77 @@ public class BookControl implements Serializable {
 
 		return filteredEditors;
 	}
-	
-    public void addMessage(String summary, String condition) {
-    	FacesMessage message;
-    	
-    	switch (condition) {
+
+	public void addMessage(String summary, String condition) {
+		FacesMessage message;
+
+		switch (condition) {
 		case DigitalLibraryConstants.INFO:
-			message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary,  null);
-	        FacesContext.getCurrentInstance().addMessage(null, message);
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
 			break;
-			
+
 		case DigitalLibraryConstants.ERROR:
-			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary,  null);
-	        FacesContext.getCurrentInstance().addMessage(null, message);
-			break;			
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			break;
 
 		case DigitalLibraryConstants.WARN:
-			message = new FacesMessage(FacesMessage.SEVERITY_WARN, summary,  null);
-	        FacesContext.getCurrentInstance().addMessage(null, message);
+			message = new FacesMessage(FacesMessage.SEVERITY_WARN, summary, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
 			break;
 		default:
 			break;
 		}
-        
-    }
 
+	}
+
+	public boolean validate(Editor editor, Autor autor, Book book) {
+		FacesMessage message;
+
+		if (editor == null) {
+			message = new FacesMessage(FacesMessage.SEVERITY_WARN, DigitalLibraryConstants.INVALID_EDITOR, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return false;
+		}
+
+		if (autor == null) {
+			message = new FacesMessage(FacesMessage.SEVERITY_WARN, DigitalLibraryConstants.INVALID_AUTOR, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return false;
+		}
+
+		if (book == null) {
+			message = new FacesMessage(FacesMessage.SEVERITY_WARN, DigitalLibraryConstants.INVALID_BOOK, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return false;
+		}
+
+		if (book.getPageNumber() == null) {
+			book.setPageNumber((short) 0);
+		}
+
+		if (book.getSummary() == null) {
+			book.setSummary(" ");
+		}
+
+		if (book.getIndex() == null) {
+			book.setIndex(" ");
+		}
+
+		if (selectCategoryList == null) {
+			message = new FacesMessage(FacesMessage.SEVERITY_WARN, DigitalLibraryConstants.INVALID_CATEGORY, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return false;
+		}
+
+		return true;
+	}
+
+	public void addBookToCart() {
+		
+	}
+	
 	public char getEditor(Editor editor) {
 		return editor.getName().charAt(0);
 	}
@@ -240,7 +299,13 @@ public class BookControl implements Serializable {
 	public void setBookList(List<Book> bookList) {
 		this.bookList = bookList;
 	}
-	
-	
-	
+
+	public UploadedFile getUploadedFile() {
+		return uploadedFile;
+	}
+
+	public void setUploadedFile(UploadedFile uploadedFile) {
+		this.uploadedFile = uploadedFile;
+	}
+
 }

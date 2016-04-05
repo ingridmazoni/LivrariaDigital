@@ -155,6 +155,8 @@ public class BookDAOImpl implements BookDAO {
 				book.setCostPrice(rs.getDouble(11));
 				book.setProfitMargin(rs.getDouble(12));
 				book.setCoverDirectory(rs.getString(13));
+				book.setAutors(fetchAutorsForBook(book.getIsbn()));
+				book.setCategories(fetchCategoriesForBook(book.getIsbn()));
 				bookList.add(book);
 			}
 			ps.close();
@@ -260,6 +262,88 @@ public class BookDAOImpl implements BookDAO {
 		
 		return false;
 	}
+	
+	public String fetchAutorsForBook(String isbn) {
+		DatabaseConnection dbCon;
+		PreparedStatement ps;
+		Connection con;
+		ResultSet rs;
+		dbCon = new DatabaseConnection();
+		builder = new StringBuilder();
+		con = dbCon.getConnection();
+		ArrayList<Book> bookList = new ArrayList<Book>();
+		StringBuilder autorNameBuilder = new StringBuilder();
+		
+		builder.append("SELECT autor.name FROM autor, book_autor, book");
+		builder.append("  WHERE autor.autor_id = book_autor.autor_fk");
+		builder.append("  AND book.book_id = book_autor.book_fk");
+		builder.append("  AND book.isbn = ?");
+		query = builder.toString();
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setString(1, isbn);
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				autorNameBuilder.append(rs.getString(1));
+				
+				if (!rs.isLast()) {
+					autorNameBuilder.append(", ");
+				}
+			}
+			ps.close();
+			rs.close();
+			con.close();
+			return autorNameBuilder.toString();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public String fetchCategoriesForBook(String isbn) {
+		DatabaseConnection dbCon;
+		PreparedStatement ps;
+		Connection con;
+		ResultSet rs;
+		dbCon = new DatabaseConnection();
+		builder = new StringBuilder();
+		con = dbCon.getConnection();
+		ArrayList<Book> bookList = new ArrayList<Book>();
+		StringBuilder categoryNameBuilder = new StringBuilder();
+		
+		builder.append("SELECT category.category_name FROM category, book_category, book");
+		builder.append("  WHERE category.category_id = book_category.category_fk");
+		builder.append("  AND book.book_id = book_category.book_fk");
+		builder.append("  AND book.isbn = ?");
+		query = builder.toString();
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setString(1, isbn);
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				categoryNameBuilder.append(rs.getString(1));
+				
+				if (!rs.isLast()) {
+					categoryNameBuilder.append(", ");
+				}
+			}
+			ps.close();
+			rs.close();
+			con.close();
+			return categoryNameBuilder.toString();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}	
 	
 //	public List<Category> fetchCategoriesForBook(Book book) {
 //		List<Category> categoryList = new ArrayList<Category>();

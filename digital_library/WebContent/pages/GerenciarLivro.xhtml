@@ -13,8 +13,8 @@
 </h:head>
 <h:body>
 	<p:tabView>
-		<p:tab title="Cadastrar_livro">
-			<h:form id="Cadastrar">
+		<p:tab title="Cadastrar livro">
+			<h:form id="Cadastrar" enctype="multipart/form-data">
 				<p:layout style="min-width:200px;min-height:700px;">
 				  <p:growl id="growl" life="2000" />
 					<p:layoutUnit position="west" resizable="true" size="600"
@@ -24,10 +24,9 @@
 							<p:inputText id="title" placeholder="Titulo" required="true"
 								type="text" value="#{bookControl.book.title}"></p:inputText>
 							<p:outputLabel for="format" value="Formato: "></p:outputLabel>
-							<p:selectOneMenu id="format" required="true"
+							<p:selectOneMenu  id="format" required="true"
 								value="#{bookControl.format}">
-								<f:selectItem itemLabel="Categoria" itemValue=""
-									noSelectionOption="true" />
+								<f:selectItem itemLabel="Formato" itemValue="" />
 								<f:selectItems value="#{loader.formatList}" />
 							</p:selectOneMenu>
 							<p:outputLabel for="editor" value="Editora: "></p:outputLabel>
@@ -45,12 +44,12 @@
 							<p:inputText id="page_number" placeholder="Numero de paginas"
 								type="text" value="#{bookControl.book.pageNumber}"></p:inputText>
 							<p:outputLabel for="publication_date" value="Data de publicacao:" />
-							<p:calendar id="publication_date"
+							<p:calendar required="true" id="publication_date"
 								value="#{bookControl.book.publicationDate}"
 								pattern="dd/MM/yyyy HH:mm:ss" />
 							<p:outputLabel for="category" value="Categoria(s) do livro:  "></p:outputLabel>
 							<p:selectManyMenu id="category"
-								value="#{bookControl.selectCategoryList}"
+								value="#{bookControl.selectCategoryList}" required="true"
 								converter="categoryConverter" var="category" filter="true"
 								filterMatchMode="contains" showCheckbox="true">
 								<f:selectItems value="#{bookControl.categoryList}"
@@ -91,7 +90,7 @@
 						minSize="10" maxSize="400">
 						<h:panelGrid columns="2" cellpadding="10">
 							<p:outputLabel for="autors" value="Autor(es):  "></p:outputLabel>
-							<p:selectManyMenu id="autors" style="width:400px"
+							<p:selectManyMenu required="true" id="autors" style="width:400px"
 								value="#{bookControl.selectedAutors}" converter="autorConverter"
 								var="autor" filter="true" filterMatchMode="contains"
 								showCheckbox="true">
@@ -102,14 +101,17 @@
 								</p:column>
 							</p:selectManyMenu>
 							<p:outputLabel for="summary" value="Resumo do livro:  "></p:outputLabel>
-							<p:inputTextarea id="summary" rows="10" cols="100"
+							<p:inputTextarea id="summary" rows="10" cols="60"
 								maxlength="15000" counterTemplate="{0} characters remaining."
 								autoResize="true" value="#{bookControl.book.summary}" />
 							<p:outputLabel for="index" value="Indice:  "></p:outputLabel>
-							<p:inputTextarea id="index" rows="10" cols="100"
+							<p:inputTextarea id="index" rows="10" cols="60"
 								maxlength="15000" counterTemplate="{0} characters remaining."
 								autoResize="true" value="#{bookControl.book.index}" />
+						  <p:outputLabel for="summary" value="Insira a capa do livro:  "></p:outputLabel>
+						  <p:fileUpload value="#{bookControl.uploadedFile}" mode="simple" skinSimple="true"/>
 						</h:panelGrid>
+
 					</p:layoutUnit>
 				</p:layout>
 				<p:commandButton value="Adicionar" update="growl"
@@ -117,7 +119,7 @@
 			</h:form>
 		</p:tab>
 		<p:tab title="Remover livro">
-			<h:form id="Remover">
+		  <h:form id="Remover">
 				<p:commandLink id="nonAjax" actionListener="#{bookControl.refreshBookList}" update="book_table" >
 	        <h:outputText value="Atualizar" />
 	      </p:commandLink>

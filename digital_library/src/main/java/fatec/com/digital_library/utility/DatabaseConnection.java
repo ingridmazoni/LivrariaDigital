@@ -12,7 +12,7 @@ public class DatabaseConnection {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
-			String serverName = "192.168.1.105";
+			String serverName = "192.168.1.111";
 			String mydatabase = "library";
 			String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
 			String username = "library";

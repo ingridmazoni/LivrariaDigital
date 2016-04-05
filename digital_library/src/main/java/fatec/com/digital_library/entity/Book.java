@@ -7,6 +7,7 @@ public class Book {
 
 	private String title;
 	private String format;
+	private String autors;
 	private List<Autor> autorList;
 	private String isbn;
 	private Editor editor;
@@ -20,6 +21,7 @@ public class Book {
 	private Double profitMargin;
 	private List<Category> category;
 	private String coverDirectory;
+	private String categories;
 
 	public List<Autor> getAutorList() {
 		return autorList;
@@ -139,6 +141,22 @@ public class Book {
 
 	public void setCoverDirectory(String coverDirectory) {
 		this.coverDirectory = coverDirectory;
+	}
+
+	public String getAutors() {
+		return autors;
+	}
+
+	public void setAutors(String autors) {
+		this.autors = autors;
+	}
+
+	public String getCategories() {
+		return categories;
+	}
+
+	public void setCategories(String categories) {
+		this.categories = categories;
 	}
 	
 }

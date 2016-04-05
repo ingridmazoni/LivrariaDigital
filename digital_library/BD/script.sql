@@ -47,6 +47,8 @@ CREATE TABLE library.autor (
 
 INSERT INTO library.autor(name, date_of_death, date_of_birth, country_of_birth, state_of_birth, city_of_birth, country_of_death, state_of_death, city_of_death, biography)
   VALUES('Autor Sobrenome autor', '1920/04/02', '1800/01/02', 'Pais', 'Estado', 'Cidade', 'Pais morte', 'Estado morte', 'Cidade Morte', 'Foi um cara bem morrido');
+INSERT INTO library.autor(name, date_of_death, date_of_birth, country_of_birth, state_of_birth, city_of_birth, country_of_death, state_of_death, city_of_death, biography)
+  VALUES('Autor2 Sobrenome auto2r', '1920/04/02', '1800/01/02', 'Pais2', 'Estado2', 'Cidade2', 'Pais morte2', 'Estado morte2', 'Cidade Morte2', 'Foi um cara bem morrido2');  
 
 CREATE TABLE library.category(
   category_id INTEGER AUTO_INCREMENT,
