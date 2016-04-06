@@ -12,137 +12,306 @@
 	<title>Gerenciamento de Livro</title>
 </h:head>
 <h:body>
-	<p:tabView>
-		<p:tab title="Cadastrar livro">
-			<h:form id="Cadastrar" enctype="multipart/form-data">
-				<p:layout style="min-width:200px;min-height:700px;">
-				  <p:growl id="growl" life="2000" />
-					<p:layoutUnit position="west" resizable="true" size="600"
-						minSize="600" maxSize="600">
-						<h:panelGrid columns="2" cellpadding="10">
-							<p:outputLabel for="title" value="Titulo: "></p:outputLabel>
-							<p:inputText id="title" placeholder="Titulo" required="true"
-								type="text" value="#{bookControl.book.title}"></p:inputText>
-							<p:outputLabel for="format" value="Formato: "></p:outputLabel>
-							<p:selectOneMenu  id="format" required="true"
-								value="#{bookControl.format}">
-								<f:selectItem itemLabel="Formato" itemValue="" />
-								<f:selectItems value="#{loader.formatList}" />
-							</p:selectOneMenu>
-							<p:outputLabel for="editor" value="Editora: "></p:outputLabel>
-							<p:selectOneMenu id="editor" required="true"
-								value="#{bookControl.editor}" converter="editorConverter"
-								panelStyle="width:180px" effect="fade" var="editor"
-								style="width:160px" filter="true" filterMatchMode="startsWith">
-								<f:selectItems value="#{bookControl.editorList}" var="editors"
-									itemLabel="#{editors.name}" itemValue="#{editors}" />
-								<p:column>
-									<h:outputText value="#{editor.name}" />
-								</p:column>
-							</p:selectOneMenu>
-							<p:outputLabel for="page_number" value="Numero de paginas:  "></p:outputLabel>
-							<p:inputText id="page_number" placeholder="Numero de paginas"
-								type="text" value="#{bookControl.book.pageNumber}"></p:inputText>
-							<p:outputLabel for="publication_date" value="Data de publicacao:" />
-							<p:calendar required="true" id="publication_date"
-								value="#{bookControl.book.publicationDate}"
-								pattern="dd/MM/yyyy HH:mm:ss" />
-							<p:outputLabel for="category" value="Categoria(s) do livro:  "></p:outputLabel>
-							<p:selectManyMenu id="category"
-								value="#{bookControl.selectCategoryList}" required="true"
-								converter="categoryConverter" var="category" filter="true"
-								filterMatchMode="contains" showCheckbox="true">
-								<f:selectItems value="#{bookControl.categoryList}"
-									var="categories" itemLabel="#{categories.category}"
-									itemValue="#{categories}" />
-								<p:column>
-									<h:outputText value="#{category.category}" />
-								</p:column>
-							</p:selectManyMenu>
-							<p:outputLabel for="sale_price" value="Valor de venda(R$):  "></p:outputLabel>
-							<pe:inputNumber id="sale_price" required="true"
-								value="#{bookControl.book.salePrice}" symbol="$ "
-								validatorMessage="O valor deve ser igual ou maior que R$0.00">
-								<f:validateDoubleRange minimum="0" />
-							</pe:inputNumber>
-							<p:outputLabel for="stock_quantity"
-								value="Quantidade em estoque:  "></p:outputLabel>
-							<p:inputText id="stock_quantity" required="true"
-								placeholder="Estoque" value="#{bookControl.book.stockQuantity}" />
-							<p:outputLabel for="cost_price" value="Custo:  "></p:outputLabel>
-							<pe:inputNumber id="cost_price" required="true"
-								value="#{bookControl.book.costPrice}" symbol="$ "
-								validatorMessage="O valor deve ser igual ou maior que R$0.00">
-								<f:validateDoubleRange minimum="0" />
-							</pe:inputNumber>
-							<p:outputLabel for="profit_margin" value="Margem de lucro:  "></p:outputLabel>
-							<pe:inputNumber id="profit_margin"
-								value="#{bookControl.book.profitMargin}" symbol="$ "
-								validatorMessage="O valor deve ser igual ou maior que R$0.00">
-								<f:validateDoubleRange minimum="0" />
-							</pe:inputNumber>
-							<p:outputLabel for="isbn" value="ISBN:  "></p:outputLabel>
-							<p:inputMask id="isbn" required="true"
-								value="#{bookControl.book.isbn}" mask="9-99999-999-9" />
-						</h:panelGrid>
-					</p:layoutUnit>
-					<p:layoutUnit position="center" resizable="true" size="200"
-						minSize="10" maxSize="400">
-						<h:panelGrid columns="2" cellpadding="10">
-							<p:outputLabel for="autors" value="Autor(es):  "></p:outputLabel>
-							<p:selectManyMenu required="true" id="autors" style="width:400px"
-								value="#{bookControl.selectedAutors}" converter="autorConverter"
-								var="autor" filter="true" filterMatchMode="contains"
-								showCheckbox="true">
-								<f:selectItems value="#{bookControl.autorList}" var="autors"
-									itemLabel="#{autors.name}" itemValue="#{autors}" />
-								<p:column>
-									<h:outputText value="#{autor.name}" />
-								</p:column>
-							</p:selectManyMenu>
-							<p:outputLabel for="summary" value="Resumo do livro:  "></p:outputLabel>
-							<p:inputTextarea id="summary" rows="10" cols="60"
-								maxlength="15000" counterTemplate="{0} characters remaining."
-								autoResize="true" value="#{bookControl.book.summary}" />
-							<p:outputLabel for="index" value="Indice:  "></p:outputLabel>
-							<p:inputTextarea id="index" rows="10" cols="60"
-								maxlength="15000" counterTemplate="{0} characters remaining."
-								autoResize="true" value="#{bookControl.book.index}" />
-						  <p:outputLabel for="summary" value="Insira a capa do livro:  "></p:outputLabel>
-						  <p:fileUpload value="#{bookControl.uploadedFile}" mode="simple" skinSimple="true"/>
-						</h:panelGrid>
+		<p:tabView>
+				<p:tab title="Cadastrar livro">
+						<h:form id="Cadastrar" enctype="multipart/form-data">
+								<p:layout style="min-width:200px;min-height:700px;">
+										<p:growl id="growl" life="2000" />
+										<p:layoutUnit position="west" resizable="true" size="600"
+												minSize="600" maxSize="600">
+												<h:panelGrid columns="2" cellpadding="10">
+														<p:outputLabel for="title" value="Titulo: "></p:outputLabel>
+														<p:inputText id="title" placeholder="Titulo"
+																required="true" type="text"
+																value="#{bookControl.book.title}"></p:inputText>
+														<p:outputLabel for="format" value="Formato: "></p:outputLabel>
+														<p:selectOneMenu id="format" required="true"
+																value="#{bookControl.format}">
+																<f:selectItem itemLabel="Formato" itemValue="" />
+																<f:selectItems value="#{loader.formatList}" />
+														</p:selectOneMenu>
+														<p:outputLabel for="editor" value="Editora: "></p:outputLabel>
+														<p:selectOneMenu id="editor" required="true"
+																value="#{bookControl.editor}"
+																converter="editorConverter" panelStyle="width:180px"
+																effect="fade" var="editor" style="width:160px"
+																filter="true" filterMatchMode="startsWith">
+																<f:selectItems value="#{bookControl.editorList}"
+																		var="editors" itemLabel="#{editors.name}"
+																		itemValue="#{editors}" />
+																<p:column>
+																		<h:outputText value="#{editor.name}" />
+																</p:column>
+														</p:selectOneMenu>
+														<p:outputLabel for="page_number"
+																value="Numero de paginas:  "></p:outputLabel>
+														<p:inputText id="page_number"
+																placeholder="Numero de paginas" type="text"
+																value="#{bookControl.book.pageNumber}"></p:inputText>
+														<p:outputLabel for="publication_date"
+																value="Data de publicacao:" />
+														<p:calendar required="true" id="publication_date"
+																value="#{bookControl.book.publicationDate}"
+																pattern="dd/MM/yyyy HH:mm:ss" />
+														<p:outputLabel for="category"
+																value="Categoria(s) do livro:  "></p:outputLabel>
+														<p:selectManyMenu id="category"
+																value="#{bookControl.selectCategoryList}"
+																required="true" converter="categoryConverter"
+																var="category" filter="true" filterMatchMode="contains"
+																showCheckbox="true">
+																<f:selectItems value="#{bookControl.categoryList}"
+																		var="categories" itemLabel="#{categories.category}"
+																		itemValue="#{categories}" />
+																<p:column>
+																		<h:outputText value="#{category.category}" />
+																</p:column>
+														</p:selectManyMenu>
+														<p:outputLabel for="sale_price"
+																value="Valor de venda(R$):  "></p:outputLabel>
+														<pe:inputNumber id="sale_price" required="true"
+																value="#{bookControl.book.salePrice}" symbol="$ "
+																validatorMessage="O valor deve ser igual ou maior que R$0.00">
+																<f:validateDoubleRange minimum="0" />
+														</pe:inputNumber>
+														<p:outputLabel for="stock_quantity"
+																value="Quantidade em estoque:  "></p:outputLabel>
+														<p:inputText id="stock_quantity" required="true"
+																placeholder="Estoque"
+																value="#{bookControl.book.stockQuantity}" />
+														<p:outputLabel for="cost_price" value="Custo:  "></p:outputLabel>
+														<pe:inputNumber id="cost_price" required="true"
+																value="#{bookControl.book.costPrice}" symbol="$ "
+																validatorMessage="O valor deve ser igual ou maior que R$0.00">
+																<f:validateDoubleRange minimum="0" />
+														</pe:inputNumber>
+														<p:outputLabel for="profit_margin"
+																value="Margem de lucro:  "></p:outputLabel>
+														<pe:inputNumber id="profit_margin"
+																value="#{bookControl.book.profitMargin}" symbol="$ "
+																validatorMessage="O valor deve ser igual ou maior que R$0.00">
+																<f:validateDoubleRange minimum="0" />
+														</pe:inputNumber>
+														<p:outputLabel for="isbn" value="ISBN:  "></p:outputLabel>
+														<p:inputMask id="isbn" required="true"
+																value="#{bookControl.book.isbn}" mask="9-99999-999-9" />
+												</h:panelGrid>
+										</p:layoutUnit>
+										<p:layoutUnit position="center" resizable="true" size="200"
+												minSize="10" maxSize="400">
+												<h:panelGrid columns="2" cellpadding="10">
+														<p:outputLabel for="autors" value="Autor(es):  "></p:outputLabel>
+														<p:selectManyMenu required="true" id="autors"
+																style="width:400px"
+																value="#{bookControl.selectedAutors}"
+																converter="autorConverter" var="autor" filter="true"
+																filterMatchMode="contains" showCheckbox="true">
+																<f:selectItems value="#{bookControl.autorList}"
+																		var="autors" itemLabel="#{autors.name}"
+																		itemValue="#{autors}" />
+																<p:column>
+																		<h:outputText value="#{autor.name}" />
+																</p:column>
+														</p:selectManyMenu>
+														<p:outputLabel for="summary" value="Resumo do livro:  "></p:outputLabel>
+														<p:inputTextarea id="summary" rows="10" cols="60"
+																maxlength="15000"
+																counterTemplate="{0} characters remaining."
+																autoResize="true" value="#{bookControl.book.summary}" />
+														<p:outputLabel for="index" value="Indice:  "></p:outputLabel>
+														<p:inputTextarea id="index" rows="10" cols="60"
+																maxlength="15000"
+																counterTemplate="{0} characters remaining."
+																autoResize="true" value="#{bookControl.book.index}" />
+														<p:outputLabel for="summary"
+																value="Insira a capa do livro:  "></p:outputLabel>
+														<p:fileUpload value="#{bookControl.uploadedFile}"
+																mode="simple" skinSimple="true" />
+												</h:panelGrid>
 
-					</p:layoutUnit>
-				</p:layout>
-				<p:commandButton value="Adicionar" update="growl"
-					actionListener="#{bookControl.createBook}"  />
-			</h:form>
-		</p:tab>
-		<p:tab title="Remover livro">
-		  <h:form id="Remover">
-				<p:commandLink id="nonAjax" actionListener="#{bookControl.refreshBookList}" update="book_table" >
-	        <h:outputText value="Atualizar" />
-	      </p:commandLink>
-				<h:panelGrid columns="2" cellpadding="10">
-					<p:dataTable id="book_table" var="book"
-						value="#{bookControl.bookList}" rows="10" paginator="true"
-						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-						rowsPerPageTemplate="5,10,15">
-						<p:column filterBy="#{book.isbn}" headerText="ISBN">
-							<h:outputText value="#{book.isbn}" />
-						</p:column>
-						<p:column filterBy="#{book.title}" headerText="Titulo">
-							<h:outputText value="#{book.title}" />
-						</p:column>
-						<p:column headerText="Remover">
-							<p:commandButton value="Remover" style="margin-left: 40%" icon="ui-icon-trash"
-								actionListener="#{bookControl.removeBook(book)}"
-								update="book_table" />
-						</p:column>
-					</p:dataTable>
-				</h:panelGrid>
-			</h:form>
-		</p:tab>
-	</p:tabView>
+										</p:layoutUnit>
+								</p:layout>
+								<p:commandButton value="Adicionar" update="growl"
+										actionListener="#{bookControl.createBook}" />
+						</h:form>
+				</p:tab>
+				<p:tab title="Remover livro">
+						<h:form id="Remover">
+								<p:commandLink id="nonAjax"
+										actionListener="#{bookControl.refreshBookList}"
+										update="book_table">
+										<h:outputText value="Atualizar" />
+								</p:commandLink>
+								<h:panelGrid columns="2" cellpadding="10">
+										<p:dataTable id="book_table" var="book"
+												value="#{bookControl.bookList}" rows="10" paginator="true"
+												paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15">
+												<p:column filterBy="#{book.isbn}" headerText="ISBN">
+														<h:outputText value="#{book.isbn}" />
+												</p:column>
+												<p:column filterBy="#{book.title}" headerText="Titulo">
+														<h:outputText value="#{book.title}" />
+												</p:column>
+												<p:column headerText="Remover">
+														<p:commandButton value="Remover" style="margin-left: 40%"
+																icon="ui-icon-trash"
+																actionListener="#{bookControl.removeBook(book)}"
+																update="book_table" />
+												</p:column>
+										</p:dataTable>
+								</h:panelGrid>
+						</h:form>
+				</p:tab>
+				<p:tab title="Alterar livro">
+						<h:form id="update">
+								<p:commandLink id="nonAjax"
+										actionListener="#{bookControl.refreshBookList}"
+										update="book_table_update">
+										<h:outputText value="Atualizar" />
+								</p:commandLink>
+								<h:panelGrid columns="2" cellpadding="10">
+										<p:dataTable id="book_table_update" var="book"
+												value="#{bookControl.bookList}" rows="10" paginator="true"
+												paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15">
+												<p:column filterBy="#{book.isbn}" headerText="ISBN">
+														<h:outputText value="#{book.isbn}" />
+												</p:column>
+												<p:column filterBy="#{book.title}" headerText="Titulo">
+														<h:outputText value="#{book.title}" />
+												</p:column>
+												<p:column headerText="Selecionar">
+														<p:commandButton value="Selecionar"
+																style="margin-left: 40%"
+																actionListener="#{bookControl.loadUpdateBook(book)}"
+																update="j_idt7:j_idt60:teste" />
+												</p:column>
+										</p:dataTable>
+								</h:panelGrid>
+						</h:form>
+						<h:form>
+								<p:layout
+										style="margin-left:11px;min-width:200px;min-height:700px;">
+										<p:growl id="growl2" life="2000" />
+										<p:layoutUnit position="west" resizable="true" size="600"
+												minSize="600" maxSize="600">
+												<h:panelGrid id="teste" columns="2" cellpadding="10">
+														<p:outputLabel for="title" value="Titulo: "></p:outputLabel>
+														<p:inputText id="title" placeholder="Titulo"
+																required="true" type="text"
+																value="#{bookControl.book.title}"></p:inputText>
+														<p:outputLabel for="format" value="Formato: "></p:outputLabel>
+														<p:selectOneMenu id="format" required="true"
+																value="#{bookControl.format}">
+																<f:selectItem itemLabel="Formato" itemValue="" />
+																<f:selectItems value="#{loader.formatList}" />
+														</p:selectOneMenu>
+														<p:outputLabel for="editor" value="Editora: "></p:outputLabel>
+														<p:selectOneMenu id="editor" required="true"
+																value="#{bookControl.editor}"
+																converter="editorConverter" panelStyle="width:180px"
+																effect="fade" var="editor" style="width:160px"
+																filter="true" filterMatchMode="startsWith">
+																<f:selectItems value="#{bookControl.editorList}"
+																		var="editors" itemLabel="#{editors.name}"
+																		itemValue="#{editors}" />
+																<p:column>
+																		<h:outputText value="#{editor.name}" />
+																</p:column>
+														</p:selectOneMenu>
+														<p:outputLabel for="page_number"
+																value="Numero de paginas:  "></p:outputLabel>
+														<p:inputText id="page_number"
+																placeholder="Numero de paginas" type="text"
+																value="#{bookControl.book.pageNumber}"></p:inputText>
+														<p:outputLabel for="publication_date"
+																value="Data de publicacao:" />
+														<p:calendar required="true" id="publication_date"
+																value="#{bookControl.book.publicationDate}"
+																pattern="dd/MM/yyyy HH:mm:ss" />
+														<p:outputLabel for="category"
+																value="Categoria(s) do livro:  "></p:outputLabel>
+														<p:selectManyMenu id="category"
+																value="#{bookControl.selectCategoryList}"
+																required="true" converter="categoryConverter"
+																var="category" filter="true" filterMatchMode="contains"
+																showCheckbox="true">
+																<f:selectItems value="#{bookControl.categoryList}"
+																		var="categories" itemLabel="#{categories.category}"
+																		itemValue="#{categories}" />
+																<p:column>
+																		<h:outputText value="#{category.category}" />
+																</p:column>
+														</p:selectManyMenu>
+														<p:outputLabel for="sale_price"
+																value="Valor de venda(R$):  "></p:outputLabel>
+														<pe:inputNumber id="sale_price" required="true"
+																value="#{bookControl.book.salePrice}" symbol="$ "
+																validatorMessage="O valor deve ser igual ou maior que R$0.00">
+																<f:validateDoubleRange minimum="0" />
+														</pe:inputNumber>
+														<p:outputLabel for="stock_quantity"
+																value="Quantidade em estoque:  "></p:outputLabel>
+														<p:inputText id="stock_quantity" required="true"
+																placeholder="Estoque"
+																value="#{bookControl.book.stockQuantity}" />
+														<p:outputLabel for="cost_price" value="Custo:  "></p:outputLabel>
+														<pe:inputNumber id="cost_price" required="true"
+																value="#{bookControl.book.costPrice}" symbol="$ "
+																validatorMessage="O valor deve ser igual ou maior que R$0.00">
+																<f:validateDoubleRange minimum="0" />
+														</pe:inputNumber>
+														<p:outputLabel for="profit_margin"
+																value="Margem de lucro:  "></p:outputLabel>
+														<pe:inputNumber id="profit_margin"
+																value="#{bookControl.book.profitMargin}" symbol="$ "
+																validatorMessage="O valor deve ser igual ou maior que R$0.00">
+																<f:validateDoubleRange minimum="0" />
+														</pe:inputNumber>
+														<p:outputLabel for="isbn" value="ISBN:  "></p:outputLabel>
+														<p:inputMask id="isbn" required="true"
+																value="#{bookControl.book.isbn}" mask="9-99999-999-9" />
+												</h:panelGrid>
+										</p:layoutUnit>
+										<p:layoutUnit position="center" resizable="true" size="200"
+												minSize="10" maxSize="400">
+												<h:panelGrid columns="2" cellpadding="10">
+														<p:outputLabel for="autors" value="Autor(es):  "></p:outputLabel>
+														<p:selectManyMenu required="true" id="autors"
+																style="width:400px"
+																value="#{bookControl.selectedAutors}"
+																converter="autorConverter" var="autor" filter="true"
+																filterMatchMode="contains" showCheckbox="true">
+																<f:selectItems value="#{bookControl.autorList}"
+																		var="autors" itemLabel="#{autors.name}"
+																		itemValue="#{autors}" />
+																<p:column>
+																		<h:outputText value="#{autor.name}" />
+																</p:column>
+														</p:selectManyMenu>
+														<p:outputLabel for="summary" value="Resumo do livro:  "></p:outputLabel>
+														<p:inputTextarea id="summary" rows="10" cols="60"
+																maxlength="15000"
+																counterTemplate="{0} characters remaining."
+																autoResize="true" value="#{bookControl.book.summary}" />
+														<p:outputLabel for="index" value="Indice:  "></p:outputLabel>
+														<p:inputTextarea id="index" rows="10" cols="60"
+																maxlength="15000"
+																counterTemplate="{0} characters remaining."
+																autoResize="true" value="#{bookControl.book.index}" />
+														<p:outputLabel for="summary"
+																value="Insira a capa do livro:  "></p:outputLabel>
+														<p:fileUpload value="#{bookControl.uploadedFile}"
+																mode="simple" skinSimple="true" />
+												</h:panelGrid>
+										</p:layoutUnit>
+								</p:layout>
+								<p:commandButton value="Alterar" style="margin-left:11px"
+										actionListener="#{bookControl.updateBook}"
+										update="j_idt7:update:book_table_update" />
+						</h:form>
+				</p:tab>
+		</p:tabView>
 </h:body>
 </html>

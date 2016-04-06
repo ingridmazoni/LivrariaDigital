@@ -2,57 +2,88 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:p="http://primefaces.org/ui"
-  xmlns:pe="http://primefaces.org/ui/extensions">
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:pe="http://primefaces.org/ui/extensions">
 
 
 <h:head>
-  <title>Buscar Livros</title>
+		<title>Buscar Livros</title>
 </h:head>
-<h:body>
-  <p:tabView>
-    <p:tab title="Busque os seus livros aqui! E facil, pratico e voce ja pode adiciona-los ao seu carrinho!!">
-      <h:form id="buscar">
-        <p:commandLink id="nonAjax" actionListener="#{bookControl.refreshBookList}" update="book_table" >
-          <h:outputText value="Atualizar" />
-        </p:commandLink>
-        <h:panelGrid columns="2" cellpadding="10">
-          <p:dataTable id="book_table" var="book"
-            value="#{bookControl.bookList}" rows="10" paginator="true"
-            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-            rowsPerPageTemplate="5,10,15">
-            <p:column filterBy="#{book.title}" headerText="Titulo" filterMatchMode="contains">
-              <h:outputText value="#{book.title}" />
-            </p:column>
-            <p:column filterBy="#{book.autors}" headerText="Autor" filterMatchMode="contains">
-              <h:outputText value="#{book.autors}" />
-            </p:column>
-            <p:column filterBy="#{book.editor.name}" headerText="Editora" filterMatchMode="contains">
-              <h:outputText value="#{book.editor.name}" />
-            </p:column>
-            <p:column filterBy="#{book.categories}" headerText="Categoria" filterMatchMode="contains">
-              <h:outputText value="#{book.categories}" />
-            </p:column>            
-            <p:column headerText="Preco">
-              <h:outputText value="#{book.salePrice}" />
-            </p:column>
-            <p:column headerText="Adicionar ao carrinho">
-              <p:commandButton style="margin-left: 40%" icon="ui-icon-gift"
-                actionListener="#{bookControl.addBookToCart(book)}"
-                update="book_table" />
-            </p:column>
-            <p:column headerText="Visualizar detalhes do carrinho">
-              <p:commandButton style="margin-left: 40%" icon="ui-icon-search"
-                actionListener="#{bookControl.addBookToCart(book)}"
-                update="book_table" />
-            </p:column>
 
-          </p:dataTable>
-        </h:panelGrid>
-      </h:form>
-    </p:tab>
-  </p:tabView>
+<h:body>
+		<h3>Busque os seus livros aqui! E facil, pratico e voce ja pode
+				adiciona-los ao seu carrinho!!</h3>
+		<h:form id="buscar">
+				<h:panelGrid columns="2" cellpadding="10">
+						<p:dataTable id="book_table" var="book"
+								value="#{bookControl.bookList}" rows="10" paginator="true"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,15">
+								<p:column filterBy="#{book.title}" headerText="Titulo"
+										filterMatchMode="contains">
+										<h:outputText value="#{book.title}" />
+								</p:column>
+								<p:column filterBy="#{book.autors}" headerText="Autor"
+										filterMatchMode="contains">
+										<h:outputText value="#{book.autors}" />
+								</p:column>
+								<p:column filterBy="#{book.editor.name}" headerText="Editora"
+										filterMatchMode="contains">
+										<h:outputText value="#{book.editor.name}" />
+								</p:column>
+								<p:column filterBy="#{book.categories}" headerText="Categoria"
+										filterMatchMode="contains">
+										<h:outputText value="#{book.categories}" />
+								</p:column>
+								<p:column headerText="Preco">
+										<h:outputText value="#{book.salePrice}" />
+								</p:column>
+								<p:column headerText="Adicionar ao carrinho">
+										<p:commandButton style="margin-left: 40%" icon="ui-icon-gift"
+												actionListener="#{shoppingCartControl.insertBookToCart(book)}"
+												update="book_table" />
+								</p:column>
+								<p:column headerText="Visualizar detalhes do livro">
+										<p:commandButton icon="ui-icon-search" update=":detail"
+												oncomplete="PF('detail').show()"
+												action="#{bookControl.loadBookDetails(book)}">
+										</p:commandButton>
+								</p:column>
+						</p:dataTable>
+				</h:panelGrid>
+		</h:form>
+		<p:dialog id="detail" widgetVar="detail">
+				<p:tabView>
+						<p:tab title="Informacoes Gerais">
+								<h:panelGrid>
+								    <h:graphicImage name="images/capa13.jpg" />
+										<h:outputText value="Titulo: #{bookControl.bookDetails.title}" />
+										<h:outputText
+												value="Formato: #{bookControl.bookDetails.format}" />
+										<h:outputText
+												value="Autor(es): #{bookControl.bookDetails.autors}" />
+										<h:outputText
+												value="Editora: #{bookControl.bookDetails.editor.name}" />
+										<h:outputText
+												value="Numero de paginas: #{bookControl.bookDetails.pageNumber}" />
+										<h:outputText
+												value="Data de publicacao: #{bookControl.bookDetails.publicationDate}" />
+										<h:outputText value="ISBN: #{bookControl.bookDetails.isbn}" />
+										<h:outputText
+												value="Categorias: #{bookControl.bookDetails.categories}" />
+										<h:outputText
+												value="Preco: #{bookControl.bookDetails.salePrice}" />
+								</h:panelGrid>
+						</p:tab>
+						<p:tab title="Resumo">
+								<h:outputText value="Titulo: #{bookControl.bookDetails.summary}" />
+						</p:tab>
+						<p:tab title="Indice">
+								<h:outputText value="Titulo: #{bookControl.bookDetails.index}" />
+						</p:tab>
+				</p:tabView>
+		</p:dialog>
 </h:body>
 </html>

@@ -2,25 +2,24 @@ package fatec.com.digital_library.control;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.UploadedFile;
 
 import fatec.com.digital_library.dao.BookDAO;
 import fatec.com.digital_library.dao.EditorDAO;
 import fatec.com.digital_library.dao.impl.BookDAOImpl;
 import fatec.com.digital_library.dao.impl.EditorDAOImpl;
-import fatec.com.digital_library.entity.Address;
 import fatec.com.digital_library.entity.Autor;
 import fatec.com.digital_library.entity.Book;
 import fatec.com.digital_library.entity.Category;
@@ -36,6 +35,7 @@ public class BookControl implements Serializable {
 	 */
 	private static final long serialVersionUID = 2910868099436434247L;
 	private UploadedFile uploadedFile;
+	private Book bookDetails;
 	private Book book = new Book();
 	private Category category = new Category();
 	private Autor autor = new Autor();
@@ -77,12 +77,6 @@ public class BookControl implements Serializable {
 				addMessage(DigitalLibraryConstants.ADD_BOOK_FAILURE, condition);
 			}
 		}
-		if (uploadedFile != null) {
-			System.out.println("foi");
-		} else {
-			System.out.println("n foi");
-		}
-
 	}
 
 	public void removeBook(Book book) {
@@ -180,10 +174,18 @@ public class BookControl implements Serializable {
 		return true;
 	}
 
-	public void addBookToCart() {
-		
+	public void loadBookDetails(Book book) {
+		bookDetails = book;
 	}
-	
+
+	public void updateBook(Book book) {
+
+	}
+
+	public void loadUpdateBook(Book book) {
+		this.book.setTitle(book.getTitle());
+	}
+
 	public char getEditor(Editor editor) {
 		return editor.getName().charAt(0);
 	}
@@ -306,6 +308,14 @@ public class BookControl implements Serializable {
 
 	public void setUploadedFile(UploadedFile uploadedFile) {
 		this.uploadedFile = uploadedFile;
+	}
+
+	public Book getBookDetails() {
+		return bookDetails;
+	}
+
+	public void setBookDetails(Book bookDetails) {
+		this.bookDetails = bookDetails;
 	}
 
 }

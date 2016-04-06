@@ -158,5 +158,5 @@ public class Book {
 	public void setCategories(String categories) {
 		this.categories = categories;
 	}
-	
+
 }
