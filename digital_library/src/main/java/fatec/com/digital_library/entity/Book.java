@@ -3,6 +3,8 @@ package fatec.com.digital_library.entity;
 import java.util.Date;
 import java.util.List;
 
+import org.primefaces.model.UploadedFile;
+
 public class Book {
 
 	private String title;
@@ -22,6 +24,7 @@ public class Book {
 	private List<Category> category;
 	private String coverDirectory;
 	private String categories;
+	private UploadedFile image;
 
 	public List<Autor> getAutorList() {
 		return autorList;
@@ -157,6 +160,14 @@ public class Book {
 
 	public void setCategories(String categories) {
 		this.categories = categories;
+	}
+
+	public UploadedFile getImage() {
+		return image;
+	}
+
+	public void setImage(UploadedFile image) {
+		this.image = image;
 	}
 
 }

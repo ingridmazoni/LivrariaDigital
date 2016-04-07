@@ -125,10 +125,8 @@
 																autoResize="true" value="#{bookControl.book.index}" />
 														<p:outputLabel for="summary"
 																value="Insira a capa do livro:  "></p:outputLabel>
-														<p:fileUpload value="#{bookControl.uploadedFile}"
-																mode="simple" skinSimple="true" />
+														 <p:fileUpload fileUploadListener="#{bookControl.upload}" auto="true" update="growl" allowTypes="/(\.|\/)(jpe?g|png)$/"/>
 												</h:panelGrid>
-
 										</p:layoutUnit>
 								</p:layout>
 								<p:commandButton value="Adicionar" update="growl"
@@ -185,7 +183,7 @@
 														<p:commandButton value="Selecionar"
 																style="margin-left: 40%"
 																actionListener="#{bookControl.loadUpdateBook(book)}"
-																update="j_idt7:j_idt60:teste" />
+																update="j_idt7:j_idt60:panel_update"/>
 												</p:column>
 										</p:dataTable>
 								</h:panelGrid>
@@ -196,7 +194,7 @@
 										<p:growl id="growl2" life="2000" />
 										<p:layoutUnit position="west" resizable="true" size="600"
 												minSize="600" maxSize="600">
-												<h:panelGrid id="teste" columns="2" cellpadding="10">
+												<h:panelGrid id="panel_update" columns="2" cellpadding="10">
 														<p:outputLabel for="title" value="Titulo: "></p:outputLabel>
 														<p:inputText id="title" placeholder="Titulo"
 																required="true" type="text"

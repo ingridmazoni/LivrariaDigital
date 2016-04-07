@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+<h:head>
+		<title>Gerenciamento de editores</title>
+</h:head>
+<h:body>
+		<p:tabView>
+				<p:tab title="Cadastrar Editora">
+						<h:form id="Cadastrar">
+								<p:growl id="growl" life="2000" />
+								<h:panelGrid columns="2" cellpadding="10">
+										<p:outputLabel for="name" value="Nome: "></p:outputLabel>
+										<p:inputText id="name" placeholder="Nome:" required="true"
+												type="text" value="#{editorControl.editor.name}"></p:inputText>
+										<p:outputLabel for="street" value="Rua: "></p:outputLabel>
+										<p:inputText id="street"
+												value="#{editorControl.editor.address.streetName}" />
+										<p:outputLabel for="building_number" value="Numero:  "></p:outputLabel>
+										<p:inputText id="building_number"
+												value="#{editorControl.editor.address.buildingNumber}" />
+										<p:outputLabel for="area_code" value="CEP:   "></p:outputLabel>
+										<p:inputText id="area_code"
+												value="#{editorControl.editor.address.areaCode}" />
+										<p:outputLabel for="state" value="Estado:   "></p:outputLabel>
+										<p:inputText id="state"
+												value="#{editorControl.editor.address.state}" />
+										<p:outputLabel for="city" value="Cidade:   "></p:outputLabel>
+										<p:inputText id="city"
+												value="#{editorControl.editor.address.city}" />
+										<p:outputLabel for="phone" value="Telefone:  "></p:outputLabel>
+										<p:inputText id="phone"
+												value="#{editorControl.editor.phoneNumber}" />
+										<p:outputLabel for="cnpj" value="CNPJ:  "></p:outputLabel>
+										<p:inputText id="cnpj" value="#{editorControl.editor.cnpj}" />
+								</h:panelGrid>
+								<p:commandButton value="Adicionar" update="growl"
+										actionListener="#{editorControl.createEditor()}" />
+						</h:form>
+				</p:tab>
+				<p:tab title="Remover Editora">
+						<h:form id="Remover">
+								<p:commandLink id="nonAjax"
+										actionListener="#{editorControl.refreshEditorList}"
+										update="editor_table">
+										<h:outputText value="Atualizar" />
+								</p:commandLink>
+								<h:panelGrid columns="2" cellpadding="10">
+										<p:dataTable id="editor_table" var="editor"
+												value="#{editorControl.editorList}" rows="10"
+												paginator="true"
+												paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15">
+												<p:column filterBy="#{editor.cnpj}" headerText="CNPJ">
+														<h:outputText value="#{editor.cnpj}" />
+												</p:column>
+												<p:column filterBy="#{editor.name}" headerText="Nome">
+														<h:outputText value="#{editor.name}" />
+												</p:column>
+												<p:column headerText="Remover">
+														<p:commandButton value="Remover" style="margin-left: 40%"
+																icon="ui-icon-trash"
+																actionListener="#{editorControl.removeEditor(editor)}"
+																update="editor_table" />
+												</p:column>
+										</p:dataTable>
+								</h:panelGrid>
+						</h:form>
+				</p:tab>
+				<p:tab title="Alterar Editora">
+						<h:form id="update">
+								<p:commandLink id="nonAjax"
+										actionListener="#{bookControl.refreshBookList}"
+										update="editor_table_update">
+										<h:outputText value="Atualizar" />
+								</p:commandLink>
+								<h:panelGrid columns="2" cellpadding="10">
+										<p:dataTable id="editor_table_update" var="editor"
+												value="#{editorControl.editorList}" rows="10"
+												paginator="true"
+												paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15">
+												<p:column filterBy="#{editor.cnpj}" headerText="CNPJ">
+														<h:outputText value="#{editor.cnpj}" />
+												</p:column>
+												<p:column filterBy="#{editor.name}" headerText="Nome">
+														<h:outputText value="#{editor.name}" />
+												</p:column>
+												<p:column headerText="Alterar">
+														<p:commandButton value="Selecionar"
+																style="margin-left: 40%"
+																actionListener="#{editorControl.loadUpdateEditor(editor)}"
+																update="j_idt7:j_idt60:panel_update" />
+												</p:column>
+										</p:dataTable>
+								</h:panelGrid>
+						</h:form>
+						<h:form>
+								<p:growl id="growl2" life="2000" />
+								<h:panelGrid id="panel_update" columns="2" cellpadding="10">
+										<p:outputLabel for="name" value="Nome: "></p:outputLabel>
+										<p:inputText id="name" placeholder="Nome:" required="true"
+												type="text" value="#{editorControl.editor.name}"></p:inputText>
+										<p:outputLabel for="street" value="Rua: "></p:outputLabel>
+										<p:inputText id="street"
+												value="#{editorControl.editor.address.streetName}" />
+										<p:outputLabel for="building_number" value="Numero:  "></p:outputLabel>
+										<p:inputText id="building_number"
+												value="#{editorControl.editor.address.buildingNumber}" />
+										<p:outputLabel for="area_code" value="CEP:   "></p:outputLabel>
+										<p:inputText id="area_code"
+												value="#{editorControl.editor.address.areaCode}" />
+										<p:outputLabel for="state" value="Estado:   "></p:outputLabel>
+										<p:inputText id="state"
+												value="#{editorControl.editor.address.state}" />
+										<p:outputLabel for="city" value="Cidade:   "></p:outputLabel>
+										<p:inputText id="city"
+												value="#{editorControl.editor.address.city}" />
+										<p:outputLabel for="phone" value="Telefone:  "></p:outputLabel>
+										<p:inputText id="phone"
+												value="#{editorControl.editor.phoneNumber}" />
+										<p:outputLabel for="cnpj" value="CNPJ:  "></p:outputLabel>
+										<p:inputText id="cnpj" value="#{editorControl.editor.cnpj}" />
+								</h:panelGrid>
+								<p:commandButton value="Alterar" style="margin-left:11px"
+										actionListener="#{editorControl.updateEditor}"
+										update="j_idt7:update:editor_table_update" />
+						</h:form>
+				</p:tab>
+				<p:tab title="Buscar Editora">
+						<h:form id="Buscar">
+								<p:commandLink id="nonAjax"
+										actionListener="#{editorControl.refreshEditorList}"
+										update="editor_table_fetch">
+										<h:outputText value="Atualizar" />
+								</p:commandLink>
+								<h:panelGrid columns="2" cellpadding="10">
+										<p:dataTable id="editor_table_fetch" var="editor"
+												value="#{editorControl.editorList}" rows="10"
+												paginator="true"
+												paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15">
+												<p:column filterBy="#{editor.cnpj}" headerText="CNPJ">
+														<h:outputText value="#{editor.cnpj}" />
+												</p:column>
+												<p:column filterBy="#{editor.name}" headerText="Nome">
+														<h:outputText value="#{editor.name}" />
+												</p:column>
+												<p:column headerText="Rua">
+														<h:outputText value="#{editor.address.streetName}" />
+												</p:column>
+                        <p:column headerText="Numero">
+                            <h:outputText value="#{editor.address.buildingNumber}" />
+                        </p:column>												
+                        <p:column headerText="Cidade">
+                            <h:outputText value="#{editor.address.city}" />
+                        </p:column>
+                        <p:column headerText="Estado">
+                            <h:outputText value="#{editor.address.state}" />
+                        </p:column> 
+                        <p:column headerText="Telefone">
+                            <h:outputText value="#{editor.phoneNumber}" />
+                        </p:column>  
+										</p:dataTable>
+								</h:panelGrid>
+						</h:form>
+				</p:tab>
+		</p:tabView>
+</h:body>
+</html>

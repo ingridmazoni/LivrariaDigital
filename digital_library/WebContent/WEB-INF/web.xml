@@ -7,21 +7,38 @@
 
 	<display-name>JavaServerFaces</display-name>
 
+  <filter>
+    <filter-name>PrimeFaces FileUpload Filter</filter-name>
+    <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    <init-param>
+      <param-name>thresholdSize</param-name>
+      <param-value>51200</param-value>
+    </init-param>
+    <init-param>
+      <param-name>uploadDirectory</param-name>
+      <param-value>C:\</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>PrimeFaces FileUpload Filter</filter-name>
+    <servlet-name>Faces Servlet</servlet-name>
+  </filter-mapping>
+
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Development</param-value>
 	</context-param>
 
 	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+
+	<context-param>
 		<param-name>com.sun.faces.writeStateAtFormEnd</param-name>
 		<param-value>false</param-value>
 	</context-param>
-	
-	<context-param>
-    <param-name>primefaces.UPLOADER</param-name>
-    <param-value>commons</param-value>
-  </context-param>
-	
+
 	<welcome-file-list>
 		<welcome-file>pages/Index.xhtml</welcome-file>
 	</welcome-file-list>
@@ -31,6 +48,11 @@
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+
+	<context-param>
+		<param-name>primefaces.UPLOADER</param-name>
+		<param-value>commons</param-value>
+	</context-param>
 
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -48,4 +70,5 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
+
 </web-app>

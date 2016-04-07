@@ -1,5 +1,6 @@
 package fatec.com.digital_library.dao.impl;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,8 +32,8 @@ public class BookDAOImpl implements BookDAO {
 		con = dbCon.getConnection();
 		builder.append("INSERT INTO library.book( ");
 		builder.append("title, format, editor_fk, page_number, publication_date, summary, idx, sale_price, ");
-		builder.append("stock, cost_price, profit_margin, isbn) ");
-		builder.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		builder.append("stock, cost_price, profit_margin, isbn, cover_directory) ");
+		builder.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		dml = builder.toString();
 
 		try {
@@ -51,7 +52,7 @@ public class BookDAOImpl implements BookDAO {
 			ps.setDouble(10, book.getCostPrice());
 			ps.setDouble(11, book.getProfitMargin());
 			ps.setString(12, book.getIsbn());
-			
+			ps.setString(13, book.getCoverDirectory());
 			
 			if (ps.executeUpdate() > 0) {
 				ps.close();

@@ -1,10 +1,15 @@
 package fatec.com.digital_library.control;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -13,7 +18,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-import org.primefaces.context.RequestContext;
+import org.apache.commons.io.FilenameUtils;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import fatec.com.digital_library.dao.BookDAO;
@@ -25,6 +31,7 @@ import fatec.com.digital_library.entity.Book;
 import fatec.com.digital_library.entity.Category;
 import fatec.com.digital_library.entity.Editor;
 import fatec.com.digital_library.utility.DigitalLibraryConstants;
+import fatec.com.digital_library.utility.ImageResizer;
 
 @ManagedBean
 @ViewScoped
@@ -51,6 +58,8 @@ public class BookControl implements Serializable {
 	private String format;
 	private String condition;
 	private List<Book> bookList;
+	private boolean isHidden = true;
+	private String noStockError;
 
 	@ManagedProperty("#{loader}")
 	private Loader loader;
@@ -67,15 +76,17 @@ public class BookControl implements Serializable {
 		if (validate(editor, autor, book)) {
 			book.setEditor(editor);
 			book.setCategory(selectCategoryList);
-			book.setAutorList(autorList);
+			book.setAutorList(selectedAutors);
 			book.setFormat(format);
 			if (bookDAO.addBook(book)) {
+				bookList.add(book);
 				condition = DigitalLibraryConstants.INFO;
 				addMessage(DigitalLibraryConstants.ADD_BOOK_SUCCESS, condition);
 			} else {
 				condition = DigitalLibraryConstants.ERROR;
 				addMessage(DigitalLibraryConstants.ADD_BOOK_FAILURE, condition);
 			}
+
 		}
 	}
 
@@ -175,7 +186,38 @@ public class BookControl implements Serializable {
 	}
 
 	public void loadBookDetails(Book book) {
+		if (book.getStockQuantity() == 0) {
+			isHidden = false;
+			noStockError = DigitalLibraryConstants.NO_STOCK_ERROR_MSG;
+		} else {
+			isHidden = true;
+		}
 		bookDetails = book;
+	}
+
+	public void upload(FileUploadEvent event) {
+		FacesMessage message;
+		UploadedFile uploadedFile = event.getFile();
+		StringBuilder builder = new StringBuilder();
+		ImageResizer imgResizer = new ImageResizer();
+		try {
+			InputStream input = uploadedFile.getInputstream();
+			Path folder = Paths.get(DigitalLibraryConstants.COVER_IMG_PATH);
+			String filename = FilenameUtils.getBaseName(uploadedFile.getFileName());
+			String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
+			Path file = Files.createTempFile(folder, filename + "-", "." + extension);
+			Files.copy(input, file, StandardCopyOption.REPLACE_EXISTING);
+			builder.append(DigitalLibraryConstants.COVER_IMG_PATH);
+			builder.append(file.getFileName().toString());
+			imgResizer.resize(builder.toString(), builder.toString());
+			book.setCoverDirectory(file.getFileName().toString());
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, DigitalLibraryConstants.UPLOAD_SUCCESS, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} catch (IOException e) {
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, DigitalLibraryConstants.UPLOAD_FAILURE, null);
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			e.printStackTrace();
+		}
 	}
 
 	public void updateBook(Book book) {
@@ -316,6 +358,22 @@ public class BookControl implements Serializable {
 
 	public void setBookDetails(Book bookDetails) {
 		this.bookDetails = bookDetails;
+	}
+
+	public boolean isHidden() {
+		return isHidden;
+	}
+
+	public void setHidden(boolean isHidden) {
+		this.isHidden = isHidden;
+	}
+
+	public String getNoStockError() {
+		return noStockError;
+	}
+
+	public void setNoStockError(String noStockError) {
+		this.noStockError = noStockError;
 	}
 
 }
