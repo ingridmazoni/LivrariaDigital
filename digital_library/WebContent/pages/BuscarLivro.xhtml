@@ -17,7 +17,7 @@
     <h:form id="buscar">
         <h:panelGrid columns="2" cellpadding="10">
             <p:dataTable id="book_table" var="book"
-                value="#{bookControl.bookList}" rows="10" paginator="true"
+                value="#{loader.bookList}" rows="10" paginator="true"
                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                 rowsPerPageTemplate="5,10,15">
                 <p:column filterBy="#{book.title}" headerText="Titulo"
@@ -45,9 +45,9 @@
                         update="book_table" />
                 </p:column>
                 <p:column headerText="Visualizar detalhes do livro">
-                    <p:commandButton icon="ui-icon-search" update=":detail book_table"
+                    <p:commandButton icon="ui-icon-search" update=":detail j_idt23:isHidden book_table"
                         oncomplete="PF('detail').show()"
-                        action="#{bookControl.loadBookDetails(book)}">
+                        action="#{chooseBook.loadBookDetails(book)}">
                     </p:commandButton>
                 </p:column>
             </p:dataTable>
@@ -57,34 +57,34 @@
         <p:tabView>
             <p:tab title="Informacoes Gerais">
                 <h:panelGrid>
-                    <h:outputText hidden="#{bookControl.isHidden}"
+                    <h:outputText id="isHidden" hidden="#{chooseBook.isHidden}"
                         style="color: red"
-                        value="#{bookControl.noStockError}" />
+                        value="#{chooseBook.noStockError}" />
                     <h:graphicImage
-                        name="images/#{bookControl.bookDetails.coverDirectory}" />
-                    <h:outputText value="Titulo: #{bookControl.bookDetails.title}" />
+                        value="/images/#{chooseBook.bookDetails.coverDirectory}" />
+                    <h:outputText value="Titulo: #{chooseBook.bookDetails.title}" />
                     <h:outputText
-                        value="Formato: #{bookControl.bookDetails.format}" />
+                        value="Formato: #{chooseBook.bookDetails.format}" />
                     <h:outputText
-                        value="Autor(es): #{bookControl.bookDetails.autors}" />
+                        value="Autor(es): #{chooseBook.bookDetails.autors}" />
                     <h:outputText
-                        value="Editora: #{bookControl.bookDetails.editor.name}" />
+                        value="Editora: #{chooseBook.bookDetails.editor.name}" />
                     <h:outputText
-                        value="Numero de paginas: #{bookControl.bookDetails.pageNumber}" />
+                        value="Numero de paginas: #{chooseBook.bookDetails.pageNumber}" />
                     <h:outputText
-                        value="Data de publicacao: #{bookControl.bookDetails.publicationDate}" />
-                    <h:outputText value="ISBN: #{bookControl.bookDetails.isbn}" />
+                        value="Data de publicacao: #{chooseBook.bookDetails.publicationDate}" />
+                    <h:outputText value="ISBN: #{chooseBook.bookDetails.isbn}" />
                     <h:outputText
-                        value="Categorias: #{bookControl.bookDetails.categories}" />
+                        value="Categorias: #{chooseBook.bookDetails.categories}" />
                     <h:outputText
-                        value="Preco: #{bookControl.bookDetails.salePrice}" />
+                        value="Preco: #{chooseBook.bookDetails.salePrice}" />
                 </h:panelGrid>
             </p:tab>
             <p:tab title="Resumo">
-                <h:outputText value="#{bookControl.bookDetails.summary}" />
+                <h:outputText value="#{chooseBook.bookDetails.summary}" />
             </p:tab>
             <p:tab title="Indice">
-                <h:outputText value="#{bookControl.bookDetails.index}" />
+                <h:outputText value="#{chooseBook.bookDetails.index}" />
             </p:tab>
         </p:tabView>
     </p:dialog>

@@ -1,29 +1,32 @@
 package fatec.com.digital_library.control;
 
-import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
+import fatec.com.digital_library.dao.BookDAO;
+import fatec.com.digital_library.dao.impl.BookDAOImpl;
 import fatec.com.digital_library.entity.Book;
+import fatec.com.digital_library.utility.DigitalLibraryConstants;
 
 @ManagedBean
 @RequestScoped
 public class ChooseBook {
 
+	private String imageDirectory = DigitalLibraryConstants.HTTP_COVER_IMG_PATH;
+	private BookDAO bookDao = new BookDAOImpl();
 	private Book bookDetails;
-	private List<Book> bookList;
-	
-	@ManagedProperty(value = "#{bookControl}")
-	private BookControl bookControl;
-
-	public void loadBooks() {
-		bookList = bookControl.getBookList();
-	}
+	private boolean isHidden = true;
+	private String noStockError;
 
 	public void loadBookDetails(Book book) {
-		bookDetails = book;
+		if (book.getStockQuantity() == 0) {
+			isHidden = false;
+			noStockError = DigitalLibraryConstants.NO_STOCK_ERROR_MSG;
+		} else {
+			isHidden = true;
+		}
+		bookDetails = bookDao.fetchBook(book);
 	}
 
 	public Book getBookDetails() {
@@ -34,21 +37,29 @@ public class ChooseBook {
 		this.bookDetails = bookDetails;
 	}
 
-	public BookControl getBookControl() {
-		return bookControl;
+	public boolean isHidden() {
+		return isHidden;
 	}
 
-	public void setBookControl(BookControl bookControl) {
-		this.bookControl = bookControl;
+	public void setHidden(boolean isHidden) {
+		this.isHidden = isHidden;
 	}
 
-	public List<Book> getBookList() {
-		return bookList;
+	public String getNoStockError() {
+		return noStockError;
 	}
 
-	public void setBookList(List<Book> bookList) {
-		this.bookList = bookList;
+	public void setNoStockError(String noStockError) {
+		this.noStockError = noStockError;
 	}
 
+	public String getImageDirectory() {
+		return imageDirectory;
+	}
+
+	public void setImageDirectory(String imageDirectory) {
+		this.imageDirectory = imageDirectory;
+	}
 	
-}
+}	
+

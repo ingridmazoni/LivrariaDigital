@@ -118,7 +118,7 @@
 																maxlength="15000"
 																counterTemplate="{0} characters remaining."
 																autoResize="true" value="#{bookControl.book.summary}" />
-														<p:outputLabel for="index" value="Indice:  "></p:outputLabel>
+														<p:outputLabel for="index" value="Sumario:  "></p:outputLabel>
 														<p:inputTextarea id="index" rows="10" cols="60"
 																maxlength="15000"
 																counterTemplate="{0} characters remaining."
@@ -129,7 +129,7 @@
 												</h:panelGrid>
 										</p:layoutUnit>
 								</p:layout>
-								<p:commandButton value="Adicionar" update="growl"
+								<p:commandButton value="Adicionar" update="growl j_idt7:Remover:book_table"
 										actionListener="#{bookControl.createBook}" />
 						</h:form>
 				</p:tab>

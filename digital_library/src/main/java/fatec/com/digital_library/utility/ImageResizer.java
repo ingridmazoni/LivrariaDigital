@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 
 public class ImageResizer {
 	public void resize(String inputImagePath, String outputImagePath) {
-		int scaledWidth = 300;
-		int scaledHeight = 400;
+		int scaledWidth = 50;
+		int scaledHeight = 60;
 		File inputFile = new File(inputImagePath);
 		BufferedImage inputImage;
 		try {

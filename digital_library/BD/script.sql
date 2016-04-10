@@ -56,8 +56,8 @@ CREATE TABLE library.category(
   PRIMARY KEY(category_id)
 );
 
-INSERT INTO category(category_name) VALUES ('ROMANCE');
-INSERT INTO category(category_name) VALUES ('TECNOLOGIA');  
+INSERT INTO library.category(category_name) VALUES ('ROMANCE');
+INSERT INTO library.category(category_name) VALUES ('TECNOLOGIA');  
 
 CREATE TABLE library.book (
   book_id INTEGER AUTO_INCREMENT,
