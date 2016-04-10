@@ -18,7 +18,6 @@ public final class DigitalLibraryConstants {
 	public static final String INFO = "info";
 	public static final String ERROR = "error";
 	public static final String COVER_IMG_PATH = "C:\\Users\\victor\\livraria_digital_repo\\digital_library\\WebContent\\resources\\images\\";
-	public static final String HTTP_COVER_IMG_PATH = "http://localhost:8080/digital_library/resources/images/";
 	public static final String UPLOAD_SUCCESS = "Upload foi realizado com sucesso";
 	public static final String UPLOAD_FAILURE = "Houve falha no upload da imagem";
 	public static final String NO_STOCK_ERROR_MSG = "Livro indisponivel no momento";

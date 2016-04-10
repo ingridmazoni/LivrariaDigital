@@ -13,7 +13,6 @@ import fatec.com.digital_library.utility.DigitalLibraryConstants;
 @RequestScoped
 public class ChooseBook {
 
-	private String imageDirectory = DigitalLibraryConstants.HTTP_COVER_IMG_PATH;
 	private BookDAO bookDao = new BookDAOImpl();
 	private Book bookDetails;
 	private boolean isHidden = true;
@@ -53,13 +52,5 @@ public class ChooseBook {
 		this.noStockError = noStockError;
 	}
 
-	public String getImageDirectory() {
-		return imageDirectory;
-	}
-
-	public void setImageDirectory(String imageDirectory) {
-		this.imageDirectory = imageDirectory;
-	}
-	
 }	
 

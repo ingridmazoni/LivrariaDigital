@@ -2,23 +2,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:pe="http://primefaces.org/ui/extensions">
 
 
 <h:head>
-	<title>Gerenciamento de Livro</title>
+		<title>Gerenciamento de Livro</title>
 </h:head>
 <h:body>
+		<p:growl id="growl" life="2000" />
 		<p:tabView>
 				<p:tab title="Cadastrar livro">
 						<h:form id="Cadastrar" enctype="multipart/form-data">
 								<p:layout style="min-width:200px;min-height:700px;">
-										<p:growl id="growl" life="2000" />
 										<p:layoutUnit position="west" resizable="true" size="600"
-												minSize="600" maxSize="600">
+												minSize="600" maxSize="600" style="height: 0px">
 												<h:panelGrid columns="2" cellpadding="10">
 														<p:outputLabel for="title" value="Titulo: "></p:outputLabel>
 														<p:inputText id="title" placeholder="Titulo"
@@ -125,11 +125,14 @@
 																autoResize="true" value="#{bookControl.book.index}" />
 														<p:outputLabel for="summary"
 																value="Insira a capa do livro:  "></p:outputLabel>
-														 <p:fileUpload fileUploadListener="#{bookControl.upload}" auto="true" update="growl" allowTypes="/(\.|\/)(jpe?g|png)$/"/>
+														<p:fileUpload fileUploadListener="#{bookControl.upload}"
+																auto="true" update="growl"
+																allowTypes="/(\.|\/)(jpe?g|png)$/" />
 												</h:panelGrid>
 										</p:layoutUnit>
 								</p:layout>
-								<p:commandButton value="Adicionar" update="growl j_idt7:Remover:book_table"
+								<p:commandButton value="Adicionar" style="margin-top: 12px"
+										update="growl j_idt7:Remover:book_table"
 										actionListener="#{bookControl.createBook}" />
 						</h:form>
 				</p:tab>
@@ -183,17 +186,16 @@
 														<p:commandButton value="Selecionar"
 																style="margin-left: 40%"
 																actionListener="#{bookControl.loadUpdateBook(book)}"
-																update="j_idt7:j_idt60:panel_update"/>
+																update="j_idt7:j_idt60:panel_update" />
 												</p:column>
 										</p:dataTable>
 								</h:panelGrid>
 						</h:form>
 						<h:form>
 								<p:layout
-										style="margin-left:11px;min-width:200px;min-height:700px;">
-										<p:growl id="growl2" life="2000" />
+										style="margin-left:0px;min-width:200px;min-height:700px;">
 										<p:layoutUnit position="west" resizable="true" size="600"
-												minSize="600" maxSize="600">
+												minSize="600" maxSize="600" style="height: 0px">
 												<h:panelGrid id="panel_update" columns="2" cellpadding="10">
 														<p:outputLabel for="title" value="Titulo: "></p:outputLabel>
 														<p:inputText id="title" placeholder="Titulo"
