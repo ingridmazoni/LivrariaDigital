@@ -1,5 +1,6 @@
 package fatec.com.digital_library.control;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,12 @@ import fatec.com.digital_library.utility.DigitalLibraryConstants;
 
 @ManagedBean(name = "loader", eager = true)
 @ApplicationScoped
-public class Loader {
+public class Loader implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3256324230982350467L;
 	private EditorDAO editorDAO = new EditorDAOImpl();
 	private CategoryDAO categoryDAO = new CategoryDAOImpl();
 	private AutorDAO autorDAO = new AutorDAOImpl();
@@ -37,35 +43,34 @@ public class Loader {
 
 	@PostConstruct
 	public void onLoad() {
-		formatList = loadFormat();
-		editorList = loadEditors();
-		categoryList = loadCategories();
-		autorList = loadAutors();
-		bookList = loadBooks();
+		loadFormat();
+		editorList = editorDAO.fetchEditors();
+		categoryList = categoryDAO.fetchAllCategories();
+		autorList = autorDAO.fetchAutors();
+		bookList = bookDAO.fetchBooks();
 
 	}
 
-	public List<String> loadFormat() {
-		ArrayList<String> formatList = new ArrayList<String>();
+	public void loadFormat() {
+		formatList = new ArrayList<String>();
 		formatList.add(DigitalLibraryConstants.HARDCOVER);
 		formatList.add(DigitalLibraryConstants.PAPERBACK);
-		return formatList;
+	}
+	
+	public void loadAutors() {
+		autorList = autorDAO.fetchAutors();
 	}
 
-	public List<Autor> loadAutors() {
-		return autorDAO.fetchAutors();
+	public void loadEditors() {
+		editorList = editorDAO.fetchEditors();
 	}
 
-	public List<Editor> loadEditors() {
-		return editorDAO.fetchEditors();
+	public void loadCategories() {
+		categoryList = categoryDAO.fetchAllCategories();
 	}
 
-	public List<Category> loadCategories() {
-		return categoryDAO.fetchAllCategories();
-	}
-
-	public List<Book> loadBooks() {
-		return bookDAO.fetchBooks();
+	public void loadBooks() {
+		bookList = bookDAO.fetchBooks(); 
 	}
 
 	public List<String> getFormatList() {
@@ -108,6 +113,4 @@ public class Loader {
 		this.bookList = bookList;
 	}
 	
-	
-
 }

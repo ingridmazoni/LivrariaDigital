@@ -10,7 +10,7 @@ public interface BookDAO {
 
 	public boolean removeBook(Book book);
 
-	public boolean fetchBook(Book book);
+	public Book fetchBook(Book book);
 
 	public List<Book> fetchBooks();
 

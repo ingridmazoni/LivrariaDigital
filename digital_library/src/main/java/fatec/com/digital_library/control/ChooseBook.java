@@ -1,29 +1,48 @@
 package fatec.com.digital_library.control;
 
+
+import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
+import fatec.com.digital_library.dao.BookDAO;
+import fatec.com.digital_library.dao.impl.BookDAOImpl;
 import fatec.com.digital_library.entity.Book;
+import fatec.com.digital_library.utility.DigitalLibraryConstants;
 
 @ManagedBean
 @RequestScoped
-public class ChooseBook {
+public class ChooseBook implements Serializable {
 
-	private Book bookDetails;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8100519542590020697L;
+	private BookDAO bookDao = new BookDAOImpl();
+	private Book bookDetails = new Book();
 	private List<Book> bookList;
-	
-	@ManagedProperty(value = "#{bookControl}")
-	private BookControl bookControl;
+	private boolean isHidden = true;
+	private String noStockError;
+	@ManagedProperty(value = "#{loader}")
+	private Loader loader;
 
-	public void loadBooks() {
-		bookList = bookControl.getBookList();
+	@PostConstruct
+	public void onLoad() {
+		bookList = loader.getBookList();
 	}
-
+	
 	public void loadBookDetails(Book book) {
-		bookDetails = book;
+		if (book.getStockQuantity() == 0) {
+			isHidden = false;
+			noStockError = DigitalLibraryConstants.NO_STOCK_ERROR_MSG;
+		} else {
+			isHidden = true;
+		}
+		bookDetails = bookDao.fetchBook(book);
 	}
 
 	public Book getBookDetails() {
@@ -34,12 +53,20 @@ public class ChooseBook {
 		this.bookDetails = bookDetails;
 	}
 
-	public BookControl getBookControl() {
-		return bookControl;
+	public boolean isHidden() {
+		return isHidden;
 	}
 
-	public void setBookControl(BookControl bookControl) {
-		this.bookControl = bookControl;
+	public void setHidden(boolean isHidden) {
+		this.isHidden = isHidden;
+	}
+
+	public String getNoStockError() {
+		return noStockError;
+	}
+
+	public void setNoStockError(String noStockError) {
+		this.noStockError = noStockError;
 	}
 
 	public List<Book> getBookList() {
@@ -50,5 +77,15 @@ public class ChooseBook {
 		this.bookList = bookList;
 	}
 
+	public Loader getLoader() {
+		return loader;
+	}
+
+	public void setLoader(Loader loader) {
+		this.loader = loader;
+	}
 	
-}
+	
+	
+}	
+

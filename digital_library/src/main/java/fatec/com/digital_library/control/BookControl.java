@@ -40,7 +40,7 @@ public class BookControl implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2910868099436434247L;
+	private static final long serialVersionUID = -1332582590535166770L;
 	private UploadedFile uploadedFile;
 	private Book bookDetails;
 	private Book book = new Book();
@@ -58,8 +58,7 @@ public class BookControl implements Serializable {
 	private String format;
 	private String condition;
 	private List<Book> bookList;
-	private boolean isHidden = true;
-	private String noStockError;
+
 
 	@ManagedProperty("#{loader}")
 	private Loader loader;
@@ -78,8 +77,9 @@ public class BookControl implements Serializable {
 			book.setCategory(selectCategoryList);
 			book.setAutorList(selectedAutors);
 			book.setFormat(format);
+			
 			if (bookDAO.addBook(book)) {
-				bookList.add(book);
+				loader.loadBooks();
 				condition = DigitalLibraryConstants.INFO;
 				addMessage(DigitalLibraryConstants.ADD_BOOK_SUCCESS, condition);
 			} else {
@@ -95,12 +95,13 @@ public class BookControl implements Serializable {
 			condition = DigitalLibraryConstants.ERROR;
 			addMessage(DigitalLibraryConstants.REMOVE_BOOK_FAILURE, condition);
 		} else {
-			bookList.remove(book);
+			loader.loadBooks();
+			bookList = loader.getBookList();
 		}
 	}
 
 	public void refreshBookList() {
-		bookList = bookDAO.fetchBooks();
+		bookList = loader.getBookList();
 	}
 
 	public List<Editor> completeEditor(String query) {
@@ -183,16 +184,6 @@ public class BookControl implements Serializable {
 		}
 
 		return true;
-	}
-
-	public void loadBookDetails(Book book) {
-		if (book.getStockQuantity() == 0) {
-			isHidden = false;
-			noStockError = DigitalLibraryConstants.NO_STOCK_ERROR_MSG;
-		} else {
-			isHidden = true;
-		}
-		bookDetails = book;
 	}
 
 	public void upload(FileUploadEvent event) {
@@ -358,22 +349,6 @@ public class BookControl implements Serializable {
 
 	public void setBookDetails(Book bookDetails) {
 		this.bookDetails = bookDetails;
-	}
-
-	public boolean isHidden() {
-		return isHidden;
-	}
-
-	public void setHidden(boolean isHidden) {
-		this.isHidden = isHidden;
-	}
-
-	public String getNoStockError() {
-		return noStockError;
-	}
-
-	public void setNoStockError(String noStockError) {
-		this.noStockError = noStockError;
 	}
 
 }

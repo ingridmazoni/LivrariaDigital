@@ -116,8 +116,55 @@ public class BookDAOImpl implements BookDAO {
 	}
 
 	@Override
-	public boolean fetchBook(Book book) {
-		return false;
+	public Book fetchBook(Book bookDetail) {
+		DatabaseConnection dbCon;
+		PreparedStatement ps;
+		Connection con;
+		ResultSet rs;
+		dbCon = new DatabaseConnection();
+		builder = new StringBuilder();
+		con = dbCon.getConnection();
+		Book book = new Book();
+		
+		builder.append("SELECT isbn, title, format, editor_fk, page_number, publication_date, summary, idx, stock, sale_price, cost_price, profit_margin, cover_directory FROM library.book ");
+		builder.append(" WHERE isbn = ?");
+		query = builder.toString();
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setString(1, bookDetail.getIsbn());
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				Editor editor = new Editor();
+				book.setIsbn(rs.getString(1));
+				book.setTitle(rs.getString(2));
+				book.setFormat(rs.getString(3));
+				editor.setName(rs.getString(4));
+				book.setEditor(editor);
+				book.setPageNumber(rs.getShort(5));
+				java.util.Date javaDate = new java.sql.Date(rs.getDate(6).getTime());
+				book.setPublicationDate(javaDate);
+				book.setSummary(rs.getString(7));
+				book.setIndex(rs.getString(8));
+				book.setStockQuantity(rs.getInt(9));
+				book.setSalePrice(rs.getDouble(10));
+				book.setCostPrice(rs.getDouble(11));
+				book.setProfitMargin(rs.getDouble(12));
+				book.setCoverDirectory(rs.getString(13));
+				book.setAutors(fetchAutorsForBook(book.getIsbn()));
+				book.setCategories(fetchCategoriesForBook(book.getIsbn()));
+			}
+			ps.close();
+			rs.close();
+			con.close();
+			return book;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}		
+		return null;
 	}
 
 	@Override
