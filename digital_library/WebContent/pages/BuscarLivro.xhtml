@@ -2,91 +2,93 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:pe="http://primefaces.org/ui/extensions">
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
-    <title>Buscar Livros</title>
+		<title>Buscar Livros</title>
 </h:head>
 
 <h:body>
-    <h3>Busque os seus livros aqui! E facil, pratico e voce ja pode
-        adiciona-los ao seu carrinho!!</h3>
-    <h:form id="buscar">
-        <h:panelGrid columns="2" cellpadding="10">
-            <p:dataTable id="book_table" var="book"
-                value="#{loader.bookList}" rows="10" paginator="true"
-                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                rowsPerPageTemplate="5,10,15">
-                <p:column filterBy="#{book.title}" headerText="Titulo"
-                    filterMatchMode="contains">
-                    <h:outputText value="#{book.title}" />
-                </p:column>
-                <p:column filterBy="#{book.autors}" headerText="Autor"
-                    filterMatchMode="contains">
-                    <h:outputText value="#{book.autors}" />
-                </p:column>
-                <p:column filterBy="#{book.editor.name}" headerText="Editora"
-                    filterMatchMode="contains">
-                    <h:outputText value="#{book.editor.name}" />
-                </p:column>
-                <p:column filterBy="#{book.categories}" headerText="Categoria"
-                    filterMatchMode="contains">
-                    <h:outputText value="#{book.categories}" />
-                </p:column>
-                <p:column headerText="Preco">
-                    <h:outputText value="#{book.salePrice}" />
-                </p:column>
-                <p:column headerText="Adicionar ao carrinho">
-                    <p:commandButton style="margin-left: 40%" icon="icon-plus-circled"
-                        actionListener="#{shoppingCartControl.insertBookToCart(book)}"
-                        update="book_table" />
-                </p:column>
-                <p:column headerText="Visualizar detalhes do livro">
-                    <p:commandButton icon="ui-icon-search" update=":detail j_idt23:isHidden book_table"
-                        oncomplete="PF('detail').show()"
-                        action="#{chooseBook.loadBookDetails(book)}">
-                    </p:commandButton>
-                </p:column>
-            </p:dataTable>
-        </h:panelGrid>
-    </h:form>
-    <p:dialog id="detail" widgetVar="detail">
-        <p:tabView>
-            <p:tab title="Informacoes Gerais">
-                <h:panelGrid>
-                    <h:outputText id="isHidden" hidden="#{chooseBook.isHidden}"
-                        style="color: red"
-                        value="#{chooseBook.noStockError}" />
-                    <h:graphicImage
-                        value="/images/#{chooseBook.bookDetails.coverDirectory}" />
-                    <h:outputText value="Titulo: #{chooseBook.bookDetails.title}" />
-                    <h:outputText
-                        value="Formato: #{chooseBook.bookDetails.format}" />
-                    <h:outputText
-                        value="Autor(es): #{chooseBook.bookDetails.autors}" />
-                    <h:outputText
-                        value="Editora: #{chooseBook.bookDetails.editor.name}" />
-                    <h:outputText
-                        value="Numero de paginas: #{chooseBook.bookDetails.pageNumber}" />
-                    <h:outputText
-                        value="Data de publicacao: #{chooseBook.bookDetails.publicationDate}" />
-                    <h:outputText value="ISBN: #{chooseBook.bookDetails.isbn}" />
-                    <h:outputText
-                        value="Categorias: #{chooseBook.bookDetails.categories}" />
-                    <h:outputText
-                        value="Preco: #{chooseBook.bookDetails.salePrice}" />
-                </h:panelGrid>
-            </p:tab>
-            <p:tab title="Resumo">
-                <h:outputText value="#{chooseBook.bookDetails.summary}" />
-            </p:tab>
-            <p:tab title="Indice">
-                <h:outputText value="#{chooseBook.bookDetails.index}" />
-            </p:tab>
-        </p:tabView>
-    </p:dialog>
+		<h3>Busque os seus livros aqui! E facil, pratico e voce ja pode
+				adiciona-los ao seu carrinho!!</h3>
+		<h:form id="buscar">
+				<h:panelGrid columns="2" cellpadding="10">
+						<p:dataTable id="book_table" var="book" value="#{chooseBook.bookList}"
+								rows="10" paginator="true"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,15">
+								<p:column filterBy="#{book.title}" headerText="Titulo"
+										filterMatchMode="contains">
+										<h:outputText value="#{book.title}" />
+								</p:column>
+								<p:column filterBy="#{book.autors}" headerText="Autor"
+										filterMatchMode="contains">
+										<h:outputText value="#{book.autors}" />
+								</p:column>
+								<p:column filterBy="#{book.editor.name}" headerText="Editora"
+										filterMatchMode="contains">
+										<h:outputText value="#{book.editor.name}" />
+								</p:column>
+								<p:column filterBy="#{book.categories}" headerText="Categoria"
+										filterMatchMode="contains">
+										<h:outputText value="#{book.categories}" />
+								</p:column>
+								<p:column headerText="Preco">
+										<h:outputText value="#{book.salePrice}" />
+								</p:column>
+								<p:column headerText="Adicionar ao carrinho">
+										<h:commandLink value="" style="margin-left: 47%"
+												update="book_table"
+												action="#{shoppingCartControl.insertBookToCart(book)}">
+												<i class="fa fa-cart-plus"></i>
+										</h:commandLink>
+								</p:column>
+								<p:column headerText="Visualizar detalhes do livro">
+										<p:commandButton icon="fa fa-search" style="margin-left: 40%"
+										    action="#{chooseBook.loadBookDetails(book)}"
+												update=":detail j_idt24:isHidden book_table"
+												oncomplete="PF('detail').show()">
+										</p:commandButton>
+								</p:column>
+						</p:dataTable>
+				</h:panelGrid>
+		</h:form>
+		<p:dialog id="detail" widgetVar="detail">
+				<p:tabView>
+						<p:tab title="Informacoes Gerais">
+								<h:panelGrid>
+										<h:outputText id="isHidden" hidden="#{chooseBook.isHidden}"
+												style="color: red" value="#{chooseBook.noStockError}" />
+										<h:graphicImage
+												value="/images/#{chooseBook.bookDetails.coverDirectory}" />
+										<h:outputText value="Titulo: #{chooseBook.bookDetails.title}" />
+										<h:outputText
+												value="Formato: #{chooseBook.bookDetails.format}" />
+										<h:outputText
+												value="Autor(es): #{chooseBook.bookDetails.autors}" />
+										<h:outputText
+												value="Editora: #{chooseBook.bookDetails.editor.name}" />
+										<h:outputText
+												value="Numero de paginas: #{chooseBook.bookDetails.pageNumber}" />
+										<h:outputText
+												value="Data de publicacao: #{chooseBook.bookDetails.publicationDate}" />
+										<h:outputText value="ISBN: #{chooseBook.bookDetails.isbn}" />
+										<h:outputText
+												value="Categorias: #{chooseBook.bookDetails.categories}" />
+										<h:outputText
+												value="Preco: #{chooseBook.bookDetails.salePrice}" />
+								</h:panelGrid>
+						</p:tab>
+						<p:tab title="Resumo">
+								<h:outputText value="#{chooseBook.bookDetails.summary}" />
+						</p:tab>
+						<p:tab title="Indice">
+								<h:outputText value="#{chooseBook.bookDetails.index}" />
+						</p:tab>
+				</p:tabView>
+		</p:dialog>
 </h:body>
 </html>

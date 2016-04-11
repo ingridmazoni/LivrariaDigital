@@ -30,7 +30,6 @@ public class ImageServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("teste");
         String filename = request.getPathInfo().substring(1);
         File file = new File(DigitalLibraryConstants.COVER_IMG_PATH, filename);
         response.setHeader("Content-Type", getServletContext().getMimeType(filename));

@@ -1,7 +1,12 @@
 package fatec.com.digital_library.control;
 
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
 import fatec.com.digital_library.dao.BookDAO;
@@ -11,13 +16,25 @@ import fatec.com.digital_library.utility.DigitalLibraryConstants;
 
 @ManagedBean
 @RequestScoped
-public class ChooseBook {
+public class ChooseBook implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8100519542590020697L;
 	private BookDAO bookDao = new BookDAOImpl();
-	private Book bookDetails;
+	private Book bookDetails = new Book();
+	private List<Book> bookList;
 	private boolean isHidden = true;
 	private String noStockError;
+	@ManagedProperty(value = "#{loader}")
+	private Loader loader;
 
+	@PostConstruct
+	public void onLoad() {
+		bookList = loader.getBookList();
+	}
+	
 	public void loadBookDetails(Book book) {
 		if (book.getStockQuantity() == 0) {
 			isHidden = false;
@@ -52,5 +69,23 @@ public class ChooseBook {
 		this.noStockError = noStockError;
 	}
 
+	public List<Book> getBookList() {
+		return bookList;
+	}
+
+	public void setBookList(List<Book> bookList) {
+		this.bookList = bookList;
+	}
+
+	public Loader getLoader() {
+		return loader;
+	}
+
+	public void setLoader(Loader loader) {
+		this.loader = loader;
+	}
+	
+	
+	
 }	
 
