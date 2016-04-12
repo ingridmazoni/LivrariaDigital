@@ -89,6 +89,7 @@ public class BookControl implements Serializable {
 
 		}
 	}
+	
 
 	public void removeBook(Book book) {
 		if (!bookDAO.removeBook(book)) {
@@ -212,11 +213,18 @@ public class BookControl implements Serializable {
 	}
 
 	public void updateBook(Book book) {
-
+		if (bookDAO.updateBook(book)) {
+			loader.loadBooks();
+			condition = DigitalLibraryConstants.INFO;
+			addMessage(DigitalLibraryConstants.UPDATE_BOOK_SUCCESS, condition);
+		} else {
+			condition = DigitalLibraryConstants.ERROR;
+			addMessage(DigitalLibraryConstants.UPDATE_BOOK_FAILURE, condition);
+		}
 	}
 
 	public void loadUpdateBook(Book book) {
-		this.book.setTitle(book.getTitle());
+		this.book = book;
 	}
 
 	public char getEditor(Editor editor) {
