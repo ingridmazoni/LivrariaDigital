@@ -9,6 +9,8 @@ public interface BookDAO {
 	public boolean addBook(Book book);
 
 	public boolean removeBook(Book book);
+	
+	public boolean updateBook(Book book);
 
 	public Book fetchBook(Book book);
 

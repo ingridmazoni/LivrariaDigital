@@ -1,6 +1,5 @@
 package fatec.com.digital_library.dao.impl;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -80,6 +79,55 @@ public class BookDAOImpl implements BookDAO {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean updateBook(Book book) {
+		DatabaseConnection dbCon;
+		PreparedStatement ps;
+		Connection con;
+		dbCon = new DatabaseConnection();
+		builder = new StringBuilder();
+		builder.append("UPDATE library.book ");
+		builder.append("SET book.title = ?, book.format = ?, book.editor_fk = ?, book.page_number = ?, book.publication_date = ?, book.summary = ?, ");
+		builder.append("book.idx = ?, book.stock = ?, book.sale_price = ?, book.cost_price = ?, book.profit_margin =?, book.isbn = ?, book.cover_directory = ?, ");
+		builder.append("WHERE book.isbn = ?");
+		dml = builder.toString();
+		
+		try {
+			con = dbCon.getConnection();
+			con.setAutoCommit(false);
+			
+			ps = con.prepareStatement(dml);
+			ps.setString(1, book.getTitle());
+			ps.setString(2, book.getFormat());
+			ps.setString(3, book.getEditor().getName());
+			ps.setInt(4, book.getPageNumber());
+			java.sql.Date sqlDate = new java.sql.Date(book.getPublicationDate().getTime());
+			ps.setDate(5, sqlDate);
+			ps.setString(6, book.getSummary());
+			ps.setString(7, book.getIndex());
+			ps.setInt(8, book.getStockQuantity());
+			ps.setDouble(9, book.getSalePrice());
+			ps.setDouble(10, book.getCostPrice());
+			ps.setDouble(11, book.getProfitMargin());
+			ps.setString(12, book.getIsbn());
+			ps.setString(13, book.getCoverDirectory());
+			
+			if (ps.executeUpdate() > 0) {
+				ps.close();
+				if (updateAutorsForBook(book)) {
+					if (updateCategoriesForBook(book)) {
+						con.commit();
+						con.close();
+						return true;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}	
 
 	@Override
 	public boolean removeBook(Book book) {
@@ -219,7 +267,7 @@ public class BookDAOImpl implements BookDAO {
 		return null;
 	}
 	
-	public boolean addAutorsForBook(Book book) {
+	private boolean addAutorsForBook(Book book) {
 		PreparedStatement ps = null;
 		try {
 			DatabaseConnection dbCon;
@@ -266,7 +314,77 @@ public class BookDAOImpl implements BookDAO {
 		return false;
 	}
 	
-	public boolean addCategoriesForBook(Book book) {
+	private boolean updateAutorsForBook(Book book) {
+		DatabaseConnection dbCon;
+		PreparedStatement ps;
+		Connection con;
+		dbCon = new DatabaseConnection();
+		builder = new StringBuilder();
+		con = dbCon.getConnection();
+		
+		builder.append("DELETE FROM library.book_autor ");
+		builder.append(" WHERE book_fk = (SELECT library.book_id FROM library.book ");
+		builder.append("                   WHERE isbn = ?)");
+		dml = builder.toString();
+		
+		try {
+			con.setAutoCommit(false);
+			ps = con.prepareStatement(dml);
+			ps.setString(1, book.getIsbn());
+			
+			if (ps.executeUpdate() > 0) {
+				ps.close();
+				con.commit();
+				con.close();
+				addAutorsForBook(book);
+				return true;
+			} else {
+				ps.close();
+				con.close();
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private boolean updateCategoriesForBook(Book book) {
+		DatabaseConnection dbCon;
+		PreparedStatement ps;
+		Connection con;
+		dbCon = new DatabaseConnection();
+		builder = new StringBuilder();
+		con = dbCon.getConnection();
+		
+		builder.append("DELETE FROM library.book_category ");
+		builder.append(" WHERE book_fk = (SELECT library.book_id FROM library.book  ");
+		builder.append("                   WHERE isbn = ?)");
+		dml = builder.toString();
+		
+		try {
+			con.setAutoCommit(false);
+			ps = con.prepareStatement(dml);
+			ps.setString(1, book.getIsbn());
+			
+			if (ps.executeUpdate() > 0) {
+				ps.close();
+				con.commit();
+				con.close();
+				addCategoriesForBook(book);
+				return true;
+			} else {
+				ps.close();
+				con.close();
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private boolean addCategoriesForBook(Book book) {
 		DatabaseConnection dbCon;
 		dbCon = new DatabaseConnection();
 		Connection con = dbCon.getConnection();
@@ -311,7 +429,7 @@ public class BookDAOImpl implements BookDAO {
 		return false;
 	}
 	
-	public String fetchAutorsForBook(String isbn) {
+	private String fetchAutorsForBook(String isbn) {
 		DatabaseConnection dbCon;
 		PreparedStatement ps;
 		Connection con;
@@ -352,7 +470,7 @@ public class BookDAOImpl implements BookDAO {
 		return null;
 	}
 	
-	public String fetchCategoriesForBook(String isbn) {
+	private String fetchCategoriesForBook(String isbn) {
 		DatabaseConnection dbCon;
 		PreparedStatement ps;
 		Connection con;
@@ -391,8 +509,8 @@ public class BookDAOImpl implements BookDAO {
 			e.printStackTrace();
 		}
 		return null;
-	}	
-	
+	}
+
 //	public List<Category> fetchCategoriesForBook(Book book) {
 //		List<Category> categoryList = new ArrayList<Category>();
 //		DatabaseConnection dbCon;

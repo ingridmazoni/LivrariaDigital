@@ -29,12 +29,16 @@ public class ImageServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String filename = request.getPathInfo().substring(1);
         File file = new File(DigitalLibraryConstants.COVER_IMG_PATH, filename);
         response.setHeader("Content-Type", getServletContext().getMimeType(filename));
         response.setHeader("Content-Length", String.valueOf(file.length()));
         response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-        Files.copy(file.toPath(), response.getOutputStream());
+        try {
+			Files.copy(file.toPath(), response.getOutputStream());
+		} catch (IOException e) {
+			System.out.println("Imagem nao encontrada. Se for a primeira vez, ignore");
+		}
     }
 }
