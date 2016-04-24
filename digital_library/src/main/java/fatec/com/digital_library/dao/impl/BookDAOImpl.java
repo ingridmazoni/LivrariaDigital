@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import fatec.com.digital_library.dao.BookAutorDAO;
+import fatec.com.digital_library.dao.BookCategoryDAO;
 import fatec.com.digital_library.dao.BookDAO;
 import fatec.com.digital_library.entity.Autor;
 import fatec.com.digital_library.entity.Book;
@@ -19,8 +21,9 @@ public class BookDAOImpl implements BookDAO {
 	private String query;
 	private String dml;
 	private StringBuilder builder;
+	private BookAutorDAO bookAutorDAO;
+	private BookCategoryDAO bookCategoryDAO;
 	
-
 	@Override
 	public boolean addBook(Book book) {
 		DatabaseConnection dbCon;
@@ -34,7 +37,9 @@ public class BookDAOImpl implements BookDAO {
 		builder.append("stock, cost_price, profit_margin, isbn, cover_directory) ");
 		builder.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		dml = builder.toString();
-
+		bookAutorDAO = new BookAutorDaoImpl();
+		bookCategoryDAO = new BookCategoryDaoImpl();
+		
 		try {
 			con.setAutoCommit(false);
 			ps = con.prepareStatement(dml);
@@ -56,8 +61,8 @@ public class BookDAOImpl implements BookDAO {
 			if (ps.executeUpdate() > 0) {
 				ps.close();
 				con.commit();
-				if (addAutorsForBook(book)) {
-					if (addCategoriesForBook(book)){
+				if (bookAutorDAO.addAutorsForBook(book)) {
+					if (bookCategoryDAO.addCategoriesForBook(book)){
 						con.close();
 						return true;
 					} else {
@@ -81,7 +86,7 @@ public class BookDAOImpl implements BookDAO {
 	}
 	
 	@Override
-	public boolean updateBook(Book book) {
+	public boolean updateBook(Book book, String newIsbn) {
 		DatabaseConnection dbCon;
 		PreparedStatement ps;
 		Connection con;
@@ -89,9 +94,11 @@ public class BookDAOImpl implements BookDAO {
 		builder = new StringBuilder();
 		builder.append("UPDATE library.book ");
 		builder.append("SET book.title = ?, book.format = ?, book.editor_fk = ?, book.page_number = ?, book.publication_date = ?, book.summary = ?, ");
-		builder.append("book.idx = ?, book.stock = ?, book.sale_price = ?, book.cost_price = ?, book.profit_margin =?, book.isbn = ?, book.cover_directory = ?, ");
+		builder.append("book.idx = ?, book.stock = ?, book.sale_price = ?, book.cost_price = ?, book.profit_margin =?, book.isbn = ?, book.cover_directory = ? ");
 		builder.append("WHERE book.isbn = ?");
 		dml = builder.toString();
+		bookAutorDAO = new BookAutorDaoImpl();
+		bookCategoryDAO = new BookCategoryDaoImpl();
 		
 		try {
 			con = dbCon.getConnection();
@@ -110,14 +117,16 @@ public class BookDAOImpl implements BookDAO {
 			ps.setDouble(9, book.getSalePrice());
 			ps.setDouble(10, book.getCostPrice());
 			ps.setDouble(11, book.getProfitMargin());
-			ps.setString(12, book.getIsbn());
+			ps.setString(12, newIsbn);
 			ps.setString(13, book.getCoverDirectory());
+			ps.setString(14, book.getIsbn());
 			
 			if (ps.executeUpdate() > 0) {
 				ps.close();
-				if (updateAutorsForBook(book)) {
-					if (updateCategoriesForBook(book)) {
-						con.commit();
+				con.commit();
+				book.setIsbn(newIsbn);
+				if (bookAutorDAO.updateAutorsForBook(book)) {
+					if (bookCategoryDAO.updateCategoriesForBook(book)) {
 						con.close();
 						return true;
 					}
@@ -173,6 +182,8 @@ public class BookDAOImpl implements BookDAO {
 		builder = new StringBuilder();
 		con = dbCon.getConnection();
 		Book book = new Book();
+		bookAutorDAO = new BookAutorDaoImpl();
+		bookCategoryDAO = new BookCategoryDaoImpl();
 		
 		builder.append("SELECT isbn, title, format, editor_fk, page_number, publication_date, summary, idx, stock, sale_price, cost_price, profit_margin, cover_directory FROM library.book ");
 		builder.append(" WHERE isbn = ?");
@@ -200,8 +211,8 @@ public class BookDAOImpl implements BookDAO {
 				book.setCostPrice(rs.getDouble(11));
 				book.setProfitMargin(rs.getDouble(12));
 				book.setCoverDirectory(rs.getString(13));
-				book.setAutors(fetchAutorsForBook(book.getIsbn()));
-				book.setCategories(fetchCategoriesForBook(book.getIsbn()));
+				book.setAutors(bookAutorDAO.fetchAutorsForBook(book.getIsbn()));
+				book.setCategories(bookCategoryDAO.fetchCategoriesForBook(book.getIsbn()));
 			}
 			ps.close();
 			rs.close();
@@ -225,6 +236,8 @@ public class BookDAOImpl implements BookDAO {
 		builder = new StringBuilder();
 		con = dbCon.getConnection();
 		ArrayList<Book> bookList = new ArrayList<Book>();
+		BookAutorDAO bookAutorDAO = new BookAutorDaoImpl();
+		BookCategoryDAO bookCategoryDAO = new BookCategoryDaoImpl();
 		
 		builder.append("SELECT isbn, title, format, editor_fk, page_number, publication_date, summary, idx, stock, sale_price, cost_price, profit_margin, cover_directory FROM library.book");
 		query = builder.toString();
@@ -251,8 +264,8 @@ public class BookDAOImpl implements BookDAO {
 				book.setCostPrice(rs.getDouble(11));
 				book.setProfitMargin(rs.getDouble(12));
 				book.setCoverDirectory(rs.getString(13));
-				book.setAutors(fetchAutorsForBook(book.getIsbn()));
-				book.setCategories(fetchCategoriesForBook(book.getIsbn()));
+				book.setAutors(bookAutorDAO.fetchAutorsForBook(book.getIsbn()));
+				book.setCategories(bookCategoryDAO.fetchCategoriesForBook(book.getIsbn()));
 				bookList.add(book);
 			}
 			ps.close();
@@ -267,249 +280,6 @@ public class BookDAOImpl implements BookDAO {
 		return null;
 	}
 	
-	private boolean addAutorsForBook(Book book) {
-		PreparedStatement ps = null;
-		try {
-			DatabaseConnection dbCon;
-			dbCon = new DatabaseConnection();
-			Connection con = dbCon.getConnection();
-			con.setAutoCommit(false);
-			
-			for (Autor autor : book.getAutorList()) {
-				builder = new StringBuilder();
-				builder.append("INSERT INTO library.book_autor (book_fk, autor_fk) ");
-				builder.append("VALUES((SELECT book_id FROM library.book");
-				builder.append("          WHERE title = ?) ");
-				builder.append("     , (SELECT autor_id FROM library.autor ");
-				builder.append("          WHERE name = ? AND city_of_birth = ? AND state_of_birth = ?))");
-				
-				String dml = builder.toString();
-				
-				try {
-					ps = con.prepareStatement(dml);
-					ps.setString(1, book.getTitle());
-					ps.setString(2, autor.getName());
-					ps.setString(3, autor.getCityOfBirth());
-					ps.setString(4, autor.getStateOfBirth());
-					
-					if (ps.executeUpdate() > 0) {
-						con.commit();
-					} else {
-						ps.close();
-						con.rollback();
-						con.close();
-						return false;
-					}
-					
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			ps.close();
-			con.close();
-			return true;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	private boolean updateAutorsForBook(Book book) {
-		DatabaseConnection dbCon;
-		PreparedStatement ps;
-		Connection con;
-		dbCon = new DatabaseConnection();
-		builder = new StringBuilder();
-		con = dbCon.getConnection();
-		
-		builder.append("DELETE FROM library.book_autor ");
-		builder.append(" WHERE book_fk = (SELECT library.book_id FROM library.book ");
-		builder.append("                   WHERE isbn = ?)");
-		dml = builder.toString();
-		
-		try {
-			con.setAutoCommit(false);
-			ps = con.prepareStatement(dml);
-			ps.setString(1, book.getIsbn());
-			
-			if (ps.executeUpdate() > 0) {
-				ps.close();
-				con.commit();
-				con.close();
-				addAutorsForBook(book);
-				return true;
-			} else {
-				ps.close();
-				con.close();
-				return false;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	private boolean updateCategoriesForBook(Book book) {
-		DatabaseConnection dbCon;
-		PreparedStatement ps;
-		Connection con;
-		dbCon = new DatabaseConnection();
-		builder = new StringBuilder();
-		con = dbCon.getConnection();
-		
-		builder.append("DELETE FROM library.book_category ");
-		builder.append(" WHERE book_fk = (SELECT library.book_id FROM library.book  ");
-		builder.append("                   WHERE isbn = ?)");
-		dml = builder.toString();
-		
-		try {
-			con.setAutoCommit(false);
-			ps = con.prepareStatement(dml);
-			ps.setString(1, book.getIsbn());
-			
-			if (ps.executeUpdate() > 0) {
-				ps.close();
-				con.commit();
-				con.close();
-				addCategoriesForBook(book);
-				return true;
-			} else {
-				ps.close();
-				con.close();
-				return false;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	private boolean addCategoriesForBook(Book book) {
-		DatabaseConnection dbCon;
-		dbCon = new DatabaseConnection();
-		Connection con = dbCon.getConnection();
-		PreparedStatement ps = null;;
-		try {
-			for (Category category : book.getCategory()) {
-				builder = new StringBuilder();
-				builder.append("INSERT INTO library.book_category (book_fk, category_fk) ");
-				builder.append("VALUES((SELECT book_id FROM library.book");
-				builder.append("          WHERE isbn = ?) ");
-				builder.append("     , (SELECT category_id FROM library.category ");
-				builder.append("          WHERE category_name = ?))");
-				
-				String dml = builder.toString();
-				
-				try {
-					con.setAutoCommit(false);
-					ps = con.prepareStatement(dml);
-					ps.setString(1, book.getIsbn());
-					ps.setString(2, category.getCategory());
-					
-					if (ps.executeUpdate() > 0) {
-						con.commit();
-					} else {
-						ps.close();
-						con.rollback();
-						con.close();
-						return false;
-					}
-					
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			ps.close();
-			con.close();
-			return true;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return false;
-	}
-	
-	private String fetchAutorsForBook(String isbn) {
-		DatabaseConnection dbCon;
-		PreparedStatement ps;
-		Connection con;
-		ResultSet rs;
-		dbCon = new DatabaseConnection();
-		builder = new StringBuilder();
-		con = dbCon.getConnection();
-		ArrayList<Book> bookList = new ArrayList<Book>();
-		StringBuilder autorNameBuilder = new StringBuilder();
-		
-		builder.append("SELECT autor.name FROM autor, book_autor, book");
-		builder.append("  WHERE autor.autor_id = book_autor.autor_fk");
-		builder.append("  AND book.book_id = book_autor.book_fk");
-		builder.append("  AND book.isbn = ?");
-		query = builder.toString();
-		
-		try {
-			ps = con.prepareStatement(query);
-			ps.setString(1, isbn);
-			rs = ps.executeQuery();
-			
-			while (rs.next()) {
-				autorNameBuilder.append(rs.getString(1));
-				
-				if (!rs.isLast()) {
-					autorNameBuilder.append(", ");
-				}
-			}
-			ps.close();
-			rs.close();
-			con.close();
-			return autorNameBuilder.toString();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	private String fetchCategoriesForBook(String isbn) {
-		DatabaseConnection dbCon;
-		PreparedStatement ps;
-		Connection con;
-		ResultSet rs;
-		dbCon = new DatabaseConnection();
-		builder = new StringBuilder();
-		con = dbCon.getConnection();
-		ArrayList<Book> bookList = new ArrayList<Book>();
-		StringBuilder categoryNameBuilder = new StringBuilder();
-		
-		builder.append("SELECT category.category_name FROM category, book_category, book");
-		builder.append("  WHERE category.category_id = book_category.category_fk");
-		builder.append("  AND book.book_id = book_category.book_fk");
-		builder.append("  AND book.isbn = ?");
-		query = builder.toString();
-		
-		try {
-			ps = con.prepareStatement(query);
-			ps.setString(1, isbn);
-			rs = ps.executeQuery();
-			
-			while (rs.next()) {
-				categoryNameBuilder.append(rs.getString(1));
-				
-				if (!rs.isLast()) {
-					categoryNameBuilder.append(", ");
-				}
-			}
-			ps.close();
-			rs.close();
-			con.close();
-			return categoryNameBuilder.toString();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 //	public List<Category> fetchCategoriesForBook(Book book) {
 //		List<Category> categoryList = new ArrayList<Category>();

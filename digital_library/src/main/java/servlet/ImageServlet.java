@@ -38,7 +38,7 @@ public class ImageServlet extends HttpServlet {
         try {
 			Files.copy(file.toPath(), response.getOutputStream());
 		} catch (IOException e) {
-			System.out.println("Imagem nao encontrada. Se for a primeira vez, ignore");
+			System.out.println("Imagem nao encontrada. Se for ao carregar a pagina, ignore");
 		}
     }
 }

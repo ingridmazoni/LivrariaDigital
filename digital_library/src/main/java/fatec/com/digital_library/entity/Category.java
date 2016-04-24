@@ -22,6 +22,9 @@ public class Category {
 		this.id = id;
 	}
 
-
+	@Override
+	public boolean equals(Object obj) {
+		return true;
+	}
 	
 }

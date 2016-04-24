@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -22,8 +21,12 @@ import org.apache.commons.io.FilenameUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
+import fatec.com.digital_library.dao.BookAutorDAO;
+import fatec.com.digital_library.dao.BookCategoryDAO;
 import fatec.com.digital_library.dao.BookDAO;
 import fatec.com.digital_library.dao.EditorDAO;
+import fatec.com.digital_library.dao.impl.BookAutorDaoImpl;
+import fatec.com.digital_library.dao.impl.BookCategoryDaoImpl;
 import fatec.com.digital_library.dao.impl.BookDAOImpl;
 import fatec.com.digital_library.dao.impl.EditorDAOImpl;
 import fatec.com.digital_library.entity.Autor;
@@ -48,6 +51,8 @@ public class BookControl implements Serializable {
 	private Autor autor = new Autor();
 	private EditorDAO editorDAO = new EditorDAOImpl();
 	private BookDAO bookDAO = new BookDAOImpl();
+	private BookAutorDAO bookAutorDAO = new BookAutorDaoImpl();
+	private BookCategoryDAO bookCategoryDAO = new BookCategoryDaoImpl();
 	private String message;
 	private Editor editor = new Editor();
 	private List<Editor> editorList;
@@ -58,7 +63,13 @@ public class BookControl implements Serializable {
 	private String format;
 	private String condition;
 	private List<Book> bookList;
-
+	private String newIsbn;
+	private List<Autor> selectedUpdateAutor;
+	private List<Category> selectedUpdateCategory;
+	private List<Autor> selectedNewAutors;
+	private List<Autor> autorListForUpdate;
+	private List<Category> selectNewCategories;
+	private List<Category> categoryListForUpdate;
 
 	@ManagedProperty("#{loader}")
 	private Loader loader;
@@ -77,7 +88,7 @@ public class BookControl implements Serializable {
 			book.setCategory(selectCategoryList);
 			book.setAutorList(selectedAutors);
 			book.setFormat(format);
-			
+
 			if (bookDAO.addBook(book)) {
 				loader.loadBooks();
 				condition = DigitalLibraryConstants.INFO;
@@ -89,7 +100,6 @@ public class BookControl implements Serializable {
 
 		}
 	}
-	
 
 	public void removeBook(Book book) {
 		if (!bookDAO.removeBook(book)) {
@@ -99,6 +109,47 @@ public class BookControl implements Serializable {
 			loader.loadBooks();
 			bookList = loader.getBookList();
 		}
+	}
+
+	public void updateBook() {
+		if (selectedNewAutors.isEmpty()) {
+			selectedNewAutors = bookAutorDAO.fetchAutorsForBook(book);
+			System.out.println("deu vazio");
+			for (Autor autor: selectedNewAutors) {
+				System.out.println(autor.getName());
+			}
+		}
+		if (selectNewCategories.isEmpty()) {
+			selectNewCategories = bookCategoryDAO.fetchCategoriesForBook(book);
+			System.out.println("deu vazio cat");
+			for (Category category: selectNewCategories) {
+				System.out.println(category.getCategory());
+			}
+		}
+		
+		for (Autor autor: selectedNewAutors) {
+			System.out.println(autor.getName());
+		}
+		
+		for (Category category: selectNewCategories) {
+			System.out.println(category.getCategory());
+		}
+		this.book.setAutorList(selectedNewAutors);
+		this.book.setCategory(selectNewCategories);
+		
+		if (bookDAO.updateBook(book, newIsbn)) {
+			loader.loadBooks();
+			condition = DigitalLibraryConstants.INFO;
+			addMessage(DigitalLibraryConstants.UPDATE_BOOK_SUCCESS, condition);
+		} else {
+			condition = DigitalLibraryConstants.ERROR;
+			addMessage(DigitalLibraryConstants.UPDATE_BOOK_FAILURE, condition);
+		}
+	}
+
+	public void loadUpdateBook(Book book) {
+		newIsbn = book.getIsbn();
+		this.book = book;
 	}
 
 	public void refreshBookList() {
@@ -210,21 +261,6 @@ public class BookControl implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, message);
 			e.printStackTrace();
 		}
-	}
-
-	public void updateBook(Book book) {
-		if (bookDAO.updateBook(book)) {
-			loader.loadBooks();
-			condition = DigitalLibraryConstants.INFO;
-			addMessage(DigitalLibraryConstants.UPDATE_BOOK_SUCCESS, condition);
-		} else {
-			condition = DigitalLibraryConstants.ERROR;
-			addMessage(DigitalLibraryConstants.UPDATE_BOOK_FAILURE, condition);
-		}
-	}
-
-	public void loadUpdateBook(Book book) {
-		this.book = book;
 	}
 
 	public char getEditor(Editor editor) {
@@ -357,6 +393,62 @@ public class BookControl implements Serializable {
 
 	public void setBookDetails(Book bookDetails) {
 		this.bookDetails = bookDetails;
+	}
+
+	public String getNewIsbn() {
+		return newIsbn;
+	}
+
+	public void setNewIsbn(String newIsbn) {
+		this.newIsbn = newIsbn;
+	}
+
+	public List<Autor> getSelectedUpdateAutor() {
+		return selectedUpdateAutor;
+	}
+
+	public void setSelectedUpdateAutor(List<Autor> selectedUpdateAutor) {
+		this.selectedUpdateAutor = selectedUpdateAutor;
+	}
+
+	public List<Category> getSelectedUpdateCategory() {
+		return selectedUpdateCategory;
+	}
+
+	public void setSelectedUpdateCategory(List<Category> selectedUpdateCategory) {
+		this.selectedUpdateCategory = selectedUpdateCategory;
+	}
+
+	public List<Autor> getSelectedNewAutors() {
+		return selectedNewAutors;
+	}
+
+	public void setSelectedNewAutors(List<Autor> selectedNewAutors) {
+		this.selectedNewAutors = selectedNewAutors;
+	}
+
+	public List<Autor> getAutorListForUpdate() {
+		return autorListForUpdate;
+	}
+
+	public void setAutorListForUpdate(List<Autor> autorListForUpdate) {
+		this.autorListForUpdate = autorListForUpdate;
+	}
+
+	public List<Category> getSelectNewCategories() {
+		return selectNewCategories;
+	}
+
+	public void setSelectNewCategories(List<Category> selectNewCategories) {
+		this.selectNewCategories = selectNewCategories;
+	}
+
+	public List<Category> getCategoryListForUpdate() {
+		return categoryListForUpdate;
+	}
+
+	public void setCategoryListForUpdate(List<Category> categoryListForUpdate) {
+		this.categoryListForUpdate = categoryListForUpdate;
 	}
 
 }
