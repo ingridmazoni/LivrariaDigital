@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+		<title>Página Inicial</title>
+</h:head>
+
+<h:body>
+    <h3>Seja bem vindo a Livraria Digital</h3>
+		<h:form>
+				<p:menubar>
+						<p:submenu label="Gerenciar" icon="fa fa-gear" rendered="true">
+								<p:menuitem value="Livro" url="../pages/GerenciarLivro.xhtml" />
+								<p:menuitem value="Autor" url="../pages/GerenciarAutor.xhtml" />
+								<p:menuitem value="Editora"
+										url="../pages/GerenciarEditora.xhtml" />
+						</p:submenu>
+
+						<p:menuitem value="Buscar Livros" url="../pages/BuscarLivro.xhtml"
+								icon="fa fa-mail-forward" />
+
+						<f:facet name="options">
+								<h:commandLink value="Visualizar Carrinho"
+										style="margin-right: 15px" update="book_table"
+										action="../pages/ControlarCarrinho.xhtml">
+										<i class="fa fa-cart-plus"></i>
+								</h:commandLink>
+								<p:commandButton type="button" value="Sair"
+										icon="ui-icon-extlink" />
+						</f:facet>
+				</p:menubar>
+
+		</h:form>
+</h:body>
+</html>
