@@ -34,7 +34,7 @@
 												maxlength="15000"
 												counterTemplate="{0} characters remaining."
 												autoResize="true" value="#{autorControl.autor.biography}" />
-										<p:outputLabel for="birth_country" value="Pais de origem:  "></p:outputLabel>
+										<p:outputLabel for="birth_country" value="País de origem:  "></p:outputLabel>
 										<p:inputText id="birth_country"
 												value="#{autorControl.autor.countryOfBirth}" />
 										<p:outputLabel for="birth_state" value="estado de origem:  "></p:outputLabel>
@@ -44,7 +44,7 @@
 										<p:inputText id="birth_city"
 												value="#{autorControl.autor.cityOfBirth}" />
 										<p:outputLabel for="death_country"
-												value="Pais de falecimento:  "></p:outputLabel>
+												value="País de falecimento:  "></p:outputLabel>
 										<p:inputText id="death_country"
 												value="#{autorControl.autor.countryOfDeath}" />
 										<p:outputLabel for="death_state"
@@ -76,7 +76,7 @@
 														<h:outputText value="#{autor.name}" />
 												</p:column>
 												<p:column filterBy="#{autor.countryOfBirth}"
-														headerText="Pais de origem">
+														headerText="País de origem">
 														<h:outputText value="#{autor.countryOfBirth}" />
 												</p:column>
 												<p:column filterBy="#{autor.stateOfBirth}"
