@@ -5,37 +5,19 @@
 		xmlns:f="http://java.sun.com/jsf/core"
 		xmlns:h="http://java.sun.com/jsf/html"
 		xmlns:p="http://primefaces.org/ui"
-		xmlns:pe="http://primefaces.org/ui/extensions">
+		xmlns:pe="http://primefaces.org/ui/extensions"
+		xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
 		<title>Livraria Digital</title>
 </h:head>
 
 <h:body>
-    <h3>Seja bem vindo a Livraria Digital</h3>
-		<h:form>
-				<p:menubar>
-						<p:submenu label="Gerenciar" icon="fa fa-gear" rendered="true">
-								<p:menuitem value="Livro" url="../pages/GerenciarLivro.xhtml" />
-								<p:menuitem value="Autor" url="../pages/GerenciarAutor.xhtml" />
-								<p:menuitem value="Editora"
-										url="../pages/GerenciarEditora.xhtml" />
-						</p:submenu>
-
-						<p:menuitem value="Buscar Livros" url="../pages/BuscarLivro.xhtml"
-								icon="fa fa-mail-forward" />
-
-						<f:facet name="options">
-								<h:commandLink value="Visualizar Carrinho"
-										style="margin-right: 15px" update="book_table"
-										action="../pages/ControlarCarrinho.xhtml">
-										<i class="fa fa-cart-plus"></i>
-								</h:commandLink>
-								<p:commandButton type="button" value="Sair"
-										icon="ui-icon-extlink" />
-						</f:facet>
-				</p:menubar>
-
-		</h:form>
+		<ui:insert name="header">
+				<ui:include src="Header.xhtml" />
+		</ui:insert>
+		<ui:insert name="content">
+				<ui:include src="Menu.xhtml" />
+		</ui:insert>
 </h:body>
 </html>

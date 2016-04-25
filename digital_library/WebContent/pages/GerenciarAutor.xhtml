@@ -5,13 +5,20 @@
 		xmlns:f="http://java.sun.com/jsf/core"
 		xmlns:h="http://java.sun.com/jsf/html"
 		xmlns:p="http://primefaces.org/ui"
-		xmlns:pe="http://primefaces.org/ui/extensions">
+		xmlns:pe="http://primefaces.org/ui/extensions"
+		xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
 <h:head>
 		<title>Gerenciamento de Autores</title>
 </h:head>
 <h:body>
+    <ui:insert name="header">
+        <ui:include src="Header.xhtml" />
+    </ui:insert>
+    <ui:insert name="content">
+        <ui:include src="Menu.xhtml" />
+    </ui:insert>
 		<p:tabView>
 				<p:tab title="Cadastrar Autor">
 						<h:form id="Cadastrar">

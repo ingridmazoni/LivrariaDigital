@@ -5,15 +5,22 @@
 		xmlns:f="http://java.sun.com/jsf/core"
 		xmlns:h="http://java.sun.com/jsf/html"
 		xmlns:p="http://primefaces.org/ui"
-		xmlns:pe="http://primefaces.org/ui/extensions">
+		xmlns:pe="http://primefaces.org/ui/extensions"
+		xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
 		<title>Buscar Livros</title>
 </h:head>
 
 <h:body>
+    <ui:insert name="header">
+        <ui:include src="Header.xhtml" />
+    </ui:insert>
+    <ui:insert name="content">
+        <ui:include src="Menu.xhtml" />
+    </ui:insert>
 		<p:growl id="growl" life="2000" />
-		<h3>Busque os seus livros aqui! E fácil, prático e você já pode
+		<h3 style="font-family: Comic Sans MS;">Busque os seus livros aqui! E fácil, prático e você já pode
 				adicioná-los ao seu carrinho!!</h3>
 		<h:form id="buscar">
 				<h:panelGrid columns="2" cellpadding="10">
@@ -57,7 +64,7 @@
 								<p:column headerText="Visualizar detalhes do livro">
 										<p:commandButton icon="fa fa-search" style="margin-left: 40%"
 												action="#{chooseBook.loadBookDetails(book)}"
-												update=":detail j_idt25:isHidden book_table"
+												update=":detail j_idt60:isHidden book_table"
 												oncomplete="PF('detail').show()">
 										</p:commandButton>
 								</p:column>
