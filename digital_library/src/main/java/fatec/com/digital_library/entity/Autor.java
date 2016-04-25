@@ -94,5 +94,10 @@ public class Autor {
 	public void setCityOfDeath(String cityOfDeath) {
 		this.cityOfDeath = cityOfDeath;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return true;
+	}
 
 }

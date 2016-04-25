@@ -10,7 +10,7 @@ public interface BookDAO {
 
 	public boolean removeBook(Book book);
 	
-	public boolean updateBook(Book book);
+	public boolean updateBook(Book book, String newIsbn);
 
 	public Book fetchBook(Book book);
 
