@@ -12,15 +12,16 @@
 </h:head>
 
 <h:body>
-		<h3>Busque os seus livros aqui! E facil, pratico e voce ja pode
-				adiciona-los ao seu carrinho!!</h3>
+		<p:growl id="growl" life="2000" />
+		<h3>Busque os seus livros aqui! E fácil, prático e você já pode
+				adicioná-los ao seu carrinho!!</h3>
 		<h:form id="buscar">
 				<h:panelGrid columns="2" cellpadding="10">
-						<p:dataTable id="book_table" var="book" value="#{chooseBook.bookList}"
-								rows="10" paginator="true"
+						<p:dataTable id="book_table" var="book"
+								value="#{chooseBook.bookList}" rows="10" paginator="true"
 								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								rowsPerPageTemplate="5,10,15">
-								<p:column filterBy="#{book.title}" headerText="Titulo"
+								<p:column filterBy="#{book.title}" headerText="Título"
 										filterMatchMode="contains">
 										<h:outputText value="#{book.title}" />
 								</p:column>
@@ -36,35 +37,43 @@
 										filterMatchMode="contains">
 										<h:outputText value="#{book.categories}" />
 								</p:column>
-								<p:column headerText="Preco">
+								<p:column headerText="Preço">
 										<h:outputText value="#{book.salePrice}" />
+								</p:column>
+								<p:column headerText="Quantidade">
+										<pe:inputNumber id="item_quantity" required="true"
+												value="#{chooseBook.shoppingCartControl.item.quantity}"
+												validatorMessage="Voce deve adicionar, no minimo, 1 item ao seu carrinho">
+												<f:validateDoubleRange minimum="1" />
+										</pe:inputNumber>
 								</p:column>
 								<p:column headerText="Adicionar ao carrinho">
 										<h:commandLink value="" style="margin-left: 47%"
-												update="book_table"
-												action="#{shoppingCartControl.insertBookToCart(book)}">
+												action="#{chooseBook.shoppingCartControl.insertBookToCart(book)}"
+												update="growl">
 												<i class="fa fa-cart-plus"></i>
 										</h:commandLink>
 								</p:column>
 								<p:column headerText="Visualizar detalhes do livro">
 										<p:commandButton icon="fa fa-search" style="margin-left: 40%"
-										    action="#{chooseBook.loadBookDetails(book)}"
-												update=":detail j_idt24:isHidden book_table"
+												action="#{chooseBook.loadBookDetails(book)}"
+												update=":detail j_idt25:isHidden book_table"
 												oncomplete="PF('detail').show()">
 										</p:commandButton>
 								</p:column>
 						</p:dataTable>
 				</h:panelGrid>
 		</h:form>
+		
 		<p:dialog id="detail" widgetVar="detail">
 				<p:tabView>
-						<p:tab title="Informacoes Gerais">
+						<p:tab title="Informações Gerais">
 								<h:panelGrid>
 										<h:outputText id="isHidden" hidden="#{chooseBook.isHidden}"
 												style="color: red" value="#{chooseBook.noStockError}" />
 										<h:graphicImage
 												value="/images/#{chooseBook.bookDetails.coverDirectory}" />
-										<h:outputText value="Titulo: #{chooseBook.bookDetails.title}" />
+										<h:outputText value="Título: #{chooseBook.bookDetails.title}" />
 										<h:outputText
 												value="Formato: #{chooseBook.bookDetails.format}" />
 										<h:outputText
@@ -72,20 +81,20 @@
 										<h:outputText
 												value="Editora: #{chooseBook.bookDetails.editor.name}" />
 										<h:outputText
-												value="Numero de paginas: #{chooseBook.bookDetails.pageNumber}" />
+												value="Número de páginas: #{chooseBook.bookDetails.pageNumber}" />
 										<h:outputText
-												value="Data de publicacao: #{chooseBook.bookDetails.publicationDate}" />
+												value="Data de publicação: #{chooseBook.bookDetails.publicationDate}" />
 										<h:outputText value="ISBN: #{chooseBook.bookDetails.isbn}" />
 										<h:outputText
 												value="Categorias: #{chooseBook.bookDetails.categories}" />
 										<h:outputText
-												value="Preco: #{chooseBook.bookDetails.salePrice}" />
+												value="Preço: #{chooseBook.bookDetails.salePrice}" />
 								</h:panelGrid>
 						</p:tab>
 						<p:tab title="Resumo">
 								<h:outputText value="#{chooseBook.bookDetails.summary}" />
 						</p:tab>
-						<p:tab title="Indice">
+						<p:tab title="Índice">
 								<h:outputText value="#{chooseBook.bookDetails.index}" />
 						</p:tab>
 				</p:tabView>

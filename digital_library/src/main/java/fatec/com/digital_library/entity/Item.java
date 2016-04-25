@@ -4,7 +4,13 @@ public class Item {
 
 	private Book book;
 	private Integer quantity;
-	private Double totalValue;
+	private Double totalValue = 0.0;
+
+	
+	public Item() {
+		super();
+		this.quantity = 1;
+	}
 
 	public Book getBook() {
 		return book;
@@ -23,6 +29,7 @@ public class Item {
 	}
 
 	public Double getTotalValue() {
+		totalValue = quantity * book.getSalePrice();
 		return totalValue;
 	}
 

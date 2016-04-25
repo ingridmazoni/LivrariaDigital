@@ -20,8 +20,8 @@
 										<p:layoutUnit position="west" resizable="true" size="600"
 												minSize="600" maxSize="600" style="height: 0px">
 												<h:panelGrid columns="2" cellpadding="10">
-														<p:outputLabel for="title" value="Titulo: "></p:outputLabel>
-														<p:inputText id="title" placeholder="Titulo"
+														<p:outputLabel for="title" value="Título: "></p:outputLabel>
+														<p:inputText id="title" placeholder="Título"
 																required="true" type="text"
 																value="#{bookControl.book.title}"></p:inputText>
 														<p:outputLabel for="format" value="Formato: "></p:outputLabel>
@@ -44,12 +44,12 @@
 																</p:column>
 														</p:selectOneMenu>
 														<p:outputLabel for="page_number"
-																value="Numero de paginas:  "></p:outputLabel>
+																value="Número de paginas:  "></p:outputLabel>
 														<p:inputText id="page_number"
-																placeholder="Numero de paginas" type="text"
+																placeholder="Número de paginas" type="text"
 																value="#{bookControl.book.pageNumber}"></p:inputText>
 														<p:outputLabel for="publication_date"
-																value="Data de publicacao:" />
+																value="Data de publicação:" />
 														<p:calendar required="true" id="publication_date"
 																value="#{bookControl.book.publicationDate}"
 																pattern="dd/MM/yyyy HH:mm:ss" />
@@ -151,7 +151,7 @@
 												<p:column filterBy="#{book.isbn}" headerText="ISBN">
 														<h:outputText value="#{book.isbn}" />
 												</p:column>
-												<p:column filterBy="#{book.title}" headerText="Titulo">
+												<p:column filterBy="#{book.title}" headerText="Título">
 														<h:outputText value="#{book.title}" />
 												</p:column>
 												<p:column headerText="Remover">
@@ -179,7 +179,7 @@
 												<p:column filterBy="#{book.isbn}" headerText="ISBN">
 														<h:outputText value="#{book.isbn}" />
 												</p:column>
-												<p:column filterBy="#{book.title}" headerText="Titulo">
+												<p:column filterBy="#{book.title}" headerText="Título">
 														<h:outputText value="#{book.title}" />
 												</p:column>
 												<p:column headerText="Selecionar">
@@ -197,8 +197,8 @@
 										<p:layoutUnit position="west" resizable="true" size="600"
 												minSize="600" maxSize="600" style="height: 0px">
 												<h:panelGrid id="panel_update" columns="2" cellpadding="10">
-														<p:outputLabel for="title" value="Titulo: "></p:outputLabel>
-														<p:inputText id="title" placeholder="Titulo" type="text"
+														<p:outputLabel for="title" value="Título: "></p:outputLabel>
+														<p:inputText id="title" placeholder="Título" type="text"
 																value="#{bookControl.book.title}"></p:inputText>
 														<p:outputLabel for="format" value="Formato: "></p:outputLabel>
 														<p:selectOneMenu id="format"
@@ -220,12 +220,12 @@
 																</p:column>
 														</p:selectOneMenu>
 														<p:outputLabel for="page_number"
-																value="Numero de paginas:  "></p:outputLabel>
+																value="Número de paginas:  "></p:outputLabel>
 														<p:inputText id="page_number"
-																placeholder="Numero de paginas" type="text"
+																placeholder="Número de paginas" type="text"
 																value="#{bookControl.book.pageNumber}"></p:inputText>
 														<p:outputLabel for="publication_date"
-																value="Data de publicacao:" />
+																value="Data de publicação:" />
 														<p:calendar id="publication_date"
 																value="#{bookControl.book.publicationDate}"
 																pattern="dd/MM/yyyy HH:mm:ss" />
@@ -294,7 +294,7 @@
 																maxlength="15000"
 																counterTemplate="{0} characters remaining."
 																autoResize="true" value="#{bookControl.book.summary}" />
-														<p:outputLabel for="index" value="Indice:  "></p:outputLabel>
+														<p:outputLabel for="index" value="Sumario:  "></p:outputLabel>
 														<p:inputTextarea id="index" rows="10" cols="60"
 																maxlength="15000"
 																counterTemplate="{0} characters remaining."
