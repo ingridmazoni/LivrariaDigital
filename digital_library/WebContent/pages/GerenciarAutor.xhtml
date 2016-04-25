@@ -37,10 +37,10 @@
 										<p:outputLabel for="birth_country" value="País de origem:  "></p:outputLabel>
 										<p:inputText id="birth_country"
 												value="#{autorControl.autor.countryOfBirth}" />
-										<p:outputLabel for="birth_state" value="estado de origem:  "></p:outputLabel>
+										<p:outputLabel for="birth_state" value="Estado de origem:  "></p:outputLabel>
 										<p:inputText id="birth_state"
 												value="#{autorControl.autor.stateOfBirth}" />
-										<p:outputLabel for="birth_city" value="cidade de origem:  "></p:outputLabel>
+										<p:outputLabel for="birth_city" value="Cidade de origem:  "></p:outputLabel>
 										<p:inputText id="birth_city"
 												value="#{autorControl.autor.cityOfBirth}" />
 										<p:outputLabel for="death_country"
@@ -109,7 +109,7 @@
 														<h:outputText value="#{autor.name}" />
 												</p:column>
 												<p:column filterBy="#{autor.countryOfBirth}"
-														headerText="Pais de origem">
+														headerText="País de origem">
 														<h:outputText value="#{autor.countryOfBirth}" />
 												</p:column>
 												<p:column filterBy="#{autor.stateOfBirth}"
@@ -145,17 +145,17 @@
 												maxlength="15000"
 												counterTemplate="{0} characters remaining."
 												autoResize="true" value="#{autorControl.autor.biography}" />
-										<p:outputLabel for="birth_country" value="Pais de origem:  "></p:outputLabel>
+										<p:outputLabel for="birth_country" value="País de origem:  "></p:outputLabel>
 										<p:inputText id="birth_country"
 												value="#{autorControl.autor.countryOfBirth}" />
-										<p:outputLabel for="birth_state" value="estado de origem:  "></p:outputLabel>
+										<p:outputLabel for="birth_state" value="Estado de origem:  "></p:outputLabel>
 										<p:inputText id="birth_state"
 												value="#{autorControl.autor.stateOfBirth}" />
-										<p:outputLabel for="birth_city" value="cidade de origem:  "></p:outputLabel>
+										<p:outputLabel for="birth_city" value="Cidade de origem:  "></p:outputLabel>
 										<p:inputText id="birth_city"
 												value="#{autorControl.autor.cityOfBirth}" />
 										<p:outputLabel for="death_country"
-												value="Pais de falecimento:  "></p:outputLabel>
+												value="País de falecimento:  "></p:outputLabel>
 										<p:inputText id="death_country"
 												value="#{autorControl.autor.countryOfDeath}" />
 										<p:outputLabel for="death_state"
@@ -163,7 +163,7 @@
 										<p:inputText id="death_state"
 												value="#{autorControl.autor.stateOfDeath}" />
 										<p:outputLabel for="death_city"
-												value="cidade de falecimento:  "></p:outputLabel>
+												value="Cidade de falecimento:  "></p:outputLabel>
 										<p:inputText id="death_city"
 												value="#{autorControl.autor.cityOfDeath}" />
 								</h:panelGrid>
@@ -188,7 +188,7 @@
 														<h:outputText value="#{autor.name}" />
 												</p:column>
 												<p:column filterBy="#{autor.countryOfBirth}"
-														headerText="Pais de origem">
+														headerText="País de origem">
 														<h:outputText value="#{autor.countryOfBirth}" />
 												</p:column>
 												<p:column filterBy="#{autor.stateOfBirth}"
@@ -204,7 +204,7 @@
                         <p:column headerText="Estado de falecimento">
                             <h:outputText value="#{autor.stateOfDeath}" />
                         </p:column>
-                        <p:column headerText="Pais de falecimento">
+                        <p:column headerText="País de falecimento">
                             <h:outputText value="#{autor.countryOfDeath}" />
                         </p:column> 
                         <p:column headerText="Biografia">
