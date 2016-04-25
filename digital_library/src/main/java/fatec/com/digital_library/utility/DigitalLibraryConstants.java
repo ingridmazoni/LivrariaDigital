@@ -10,6 +10,8 @@ public final class DigitalLibraryConstants {
 	public static final String REMOVE_BOOK_FAILURE = "Houve falha em remover livro";
 	public static final String UPDATE_BOOK_SUCCESS = "Livro alterado com sucesso";
 	public static final String UPDATE_BOOK_FAILURE = "Houve falha em alterar livro";
+	public static final String INSERT_BOOK_CART_SUCCESS = "Item inserido no carrinho com Sucesso";
+	public static final String INSERT_BOOK_CART_WARN = "Item ja inserido no carrinho";
 	public static final String INVALID_EDITOR = "Voce precisa selecionar uma editora valida";
 	public static final String INVALID_AUTOR = "Voce precisa selecionar um ou mais autores validos";
 	public static final String INVALID_BOOK = "Dados de livro incorretos. Por favor, verifique e tente novamente";

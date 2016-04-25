@@ -27,8 +27,12 @@ public class ChooseBook implements Serializable {
 	private List<Book> bookList;
 	private boolean isHidden = true;
 	private String noStockError;
+	
 	@ManagedProperty(value = "#{loader}")
 	private Loader loader;
+	
+	@ManagedProperty("#{shoppingCartControl}")
+	private ShoppingCartControl shoppingCartControl;
 
 	@PostConstruct
 	public void onLoad() {
@@ -84,8 +88,14 @@ public class ChooseBook implements Serializable {
 	public void setLoader(Loader loader) {
 		this.loader = loader;
 	}
-	
-	
+
+	public ShoppingCartControl getShoppingCartControl() {
+		return shoppingCartControl;
+	}
+
+	public void setShoppingCartControl(ShoppingCartControl shoppingCartControl) {
+		this.shoppingCartControl = shoppingCartControl;
+	}
 	
 }	
 

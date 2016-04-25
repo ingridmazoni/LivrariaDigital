@@ -5,13 +5,20 @@
 		xmlns:f="http://java.sun.com/jsf/core"
 		xmlns:h="http://java.sun.com/jsf/html"
 		xmlns:p="http://primefaces.org/ui"
-		xmlns:pe="http://primefaces.org/ui/extensions">
+		xmlns:pe="http://primefaces.org/ui/extensions"
+		xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
 <h:head>
 		<title>Gerenciamento de Livro</title>
 </h:head>
 <h:body>
+    <ui:insert name="header">
+        <ui:include src="Header.xhtml" />
+    </ui:insert>
+    <ui:insert name="content">
+        <ui:include src="Menu.xhtml" />
+    </ui:insert>
 		<p:growl id="growl" life="2000" />
 		<p:tabView>
 				<p:tab title="Cadastrar livro">
@@ -43,8 +50,8 @@
 																		<h:outputText value="#{editor.name}" />
 																</p:column>
 														</p:selectOneMenu>
-														<p:outputLabel for="page_number"
-																value="Número de páginas:  "></p:outputLabel>
+														<p:outputLabel for="page_number" value="Número de páginas:  "></p:outputLabel>
+
 														<p:inputText id="page_number"
 																placeholder="Número de paginas" type="text"
 																value="#{bookControl.book.pageNumber}"></p:inputText>
@@ -132,7 +139,7 @@
 										</p:layoutUnit>
 								</p:layout>
 								<p:commandButton value="Adicionar"
-										update="growl j_idt7:Remover:book_table"
+										update="growl j_idt9:Remover:book_table"
 										actionListener="#{bookControl.createBook}" />
 						</h:form>
 				</p:tab>
@@ -186,7 +193,7 @@
 														<p:commandButton value="Selecionar"
 																style="margin-left: 40%"
 																actionListener="#{bookControl.loadUpdateBook(book)}"
-																update="j_idt7:j_idt60:panel_update j_idt7:j_idt60:panel_update2" />
+																update="j_idt9:j_idt128:panel_update j_idt9:j_idt128:panel_update2" />
 												</p:column>
 										</p:dataTable>
 								</h:panelGrid>
@@ -294,7 +301,8 @@
 																maxlength="15000"
 																counterTemplate="{0} characters remaining."
 																autoResize="true" value="#{bookControl.book.summary}" />
-														<p:outputLabel for="index" value="Índice:  "></p:outputLabel>
+
+														<p:outputLabel for="index" value="Sumario:  "></p:outputLabel>
 														<p:inputTextarea id="index" rows="10" cols="60"
 																maxlength="15000"
 																counterTemplate="{0} characters remaining."
@@ -309,7 +317,7 @@
 								</p:layout>
 								<p:commandButton value="Alterar"
 										actionListener="#{bookControl.updateBook()}"
-										update="j_idt7:update:book_table_update growl" />
+										update="j_idt9:update:book_table_update growl" />
 						</h:form>
 				</p:tab>
 		</p:tabView>
