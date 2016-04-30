@@ -93,6 +93,7 @@ public class BookControl implements Serializable {
 				loader.loadBooks();
 				condition = DigitalLibraryConstants.INFO;
 				addMessage(DigitalLibraryConstants.ADD_BOOK_SUCCESS, condition);
+				refreshBookList();
 			} else {
 				condition = DigitalLibraryConstants.ERROR;
 				addMessage(DigitalLibraryConstants.ADD_BOOK_FAILURE, condition);
@@ -114,26 +115,11 @@ public class BookControl implements Serializable {
 	public void updateBook() {
 		if (selectedNewAutors.isEmpty()) {
 			selectedNewAutors = bookAutorDAO.fetchAutorsForBook(book);
-			System.out.println("deu vazio");
-			for (Autor autor: selectedNewAutors) {
-				System.out.println(autor.getName());
-			}
 		}
 		if (selectNewCategories.isEmpty()) {
 			selectNewCategories = bookCategoryDAO.fetchCategoriesForBook(book);
-			System.out.println("deu vazio cat");
-			for (Category category: selectNewCategories) {
-				System.out.println(category.getCategory());
-			}
 		}
 		
-		for (Autor autor: selectedNewAutors) {
-			System.out.println(autor.getName());
-		}
-		
-		for (Category category: selectNewCategories) {
-			System.out.println(category.getCategory());
-		}
 		this.book.setAutorList(selectedNewAutors);
 		this.book.setCategory(selectNewCategories);
 		
