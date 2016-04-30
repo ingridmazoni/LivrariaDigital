@@ -1,6 +1,5 @@
 package fatec.com.digital_library.control;
 
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -27,10 +26,11 @@ public class ChooseBook implements Serializable {
 	private List<Book> bookList;
 	private boolean isHidden = true;
 	private String noStockError;
-	
+	private int quantity;
+
 	@ManagedProperty(value = "#{loader}")
 	private Loader loader;
-	
+
 	@ManagedProperty("#{shoppingCartControl}")
 	private ShoppingCartControl shoppingCartControl;
 
@@ -38,7 +38,7 @@ public class ChooseBook implements Serializable {
 	public void onLoad() {
 		bookList = loader.getBookList();
 	}
-	
+
 	public void loadBookDetails(Book book) {
 		if (book.getStockQuantity() == 0) {
 			isHidden = false;
@@ -51,6 +51,10 @@ public class ChooseBook implements Serializable {
 
 	public Book getBookDetails() {
 		return bookDetails;
+	}
+	
+	public void sendToCart(Book book) {
+		this.getShoppingCartControl().insertBookToCart(book);
 	}
 
 	public void setBookDetails(Book bookDetails) {
@@ -96,6 +100,13 @@ public class ChooseBook implements Serializable {
 	public void setShoppingCartControl(ShoppingCartControl shoppingCartControl) {
 		this.shoppingCartControl = shoppingCartControl;
 	}
-	
-}	
 
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+}

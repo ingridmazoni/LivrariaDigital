@@ -11,6 +11,7 @@ public class DatabaseConnection {
 	public Connection getConnection() {
 		try {
 
+
 			Class.forName("com.mysql.jdbc.Driver");
 			String serverName = "localhost";
 			String mydatabase = "library";
