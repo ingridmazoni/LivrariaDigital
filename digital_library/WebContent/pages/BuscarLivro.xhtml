@@ -49,14 +49,14 @@
 								</p:column>
 								<p:column headerText="Quantidade">
 										<pe:inputNumber id="item_quantity" required="true"
-												value="#{chooseBook.shoppingCartControl.item.quantity}"
+												value="#{book.quantity}"
 												validatorMessage="Voce deve adicionar, no minimo, 1 item ao seu carrinho">
 												<f:validateDoubleRange minimum="1" />
 										</pe:inputNumber>
 								</p:column>
 								<p:column headerText="Adicionar ao carrinho">
 										<h:commandLink value="" style="margin-left: 47%"
-												action="#{chooseBook.shoppingCartControl.insertBookToCart(book)}"
+												action="#{chooseBook.sendToCart(book)}"
 												update="growl">
 												<i class="fa fa-cart-plus"></i>
 										</h:commandLink>
@@ -64,7 +64,7 @@
 								<p:column headerText="Visualizar detalhes do livro">
 										<p:commandButton icon="fa fa-search" style="margin-left: 40%"
 												action="#{chooseBook.loadBookDetails(book)}"
-												update=":detail j_idt37:isHidden book_table" 
+												update=":detail  tab_view:isHidden " 
 												oncomplete="PF('detail').show()"> 
 										</p:commandButton>
 								</p:column>
@@ -73,9 +73,9 @@
 		</h:form>
 		
 		<p:dialog id="detail" widgetVar="detail">
-				<p:tabView>
-						<p:tab title="Informações Gerais">
-								<h:panelGrid>
+				<p:tabView id="tab_view">
+						<p:tab id="tab" title="Informações Gerais">
+								<h:panelGrid id="panel_grid">
 										<h:outputText id="isHidden" hidden="#{chooseBook.isHidden}"
 												style="color: red" value="#{chooseBook.noStockError}" />
 										<h:graphicImage

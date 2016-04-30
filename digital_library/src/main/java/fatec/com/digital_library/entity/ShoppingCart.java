@@ -1,11 +1,12 @@
 package fatec.com.digital_library.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ShoppingCart {
 
-	private List<Item> itemList = new ArrayList<Item>();;
+	private List<Item> itemList = Collections.synchronizedList(new ArrayList<Item>());
 	private Double allItemsValue = 0.0;
 
 	public List<Item> getItemList() {
@@ -18,8 +19,8 @@ public class ShoppingCart {
 
 	public Double getAllItemsValue() {
 		if (!itemList.isEmpty()){
+			allItemsValue = 0.0;
 			for (Item item: itemList) {
-				allItemsValue = 0.0;
 				allItemsValue += item.getTotalValue();
 			}
 		}

@@ -37,7 +37,7 @@
 								</p:column>
 								<p:column headerText="Quantidade: ">
                     <pe:inputNumber id="item_quantity" required="true"
-                        value="#{chooseBook.shoppingCartControl.item.quantity}"
+                        value="#{item.quantity}" 
                         validatorMessage="Voce deve adicionar, no minimo, 1 item ao seu carrinho">
                         <f:validateDoubleRange minimum="1" />
                     </pe:inputNumber>
@@ -45,11 +45,11 @@
 								<p:column headerText="Remover">
 										<p:commandButton style="margin-left: 45%" icon="ui-icon-trash"
 												actionListener="#{chooseBook.shoppingCartControl.removeItem(item)}"
-												update="cart_table" />
+												update="cart_table :cart:total_price" />
 								</p:column>
 						</p:dataTable>
 				</h:panelGrid>
-				<h:outputText value="Preco Total: R$#{chooseBook.shoppingCartControl.totalItemPrice}" />
+				<h:outputText id="total_price" value="Preco Total: R$#{chooseBook.shoppingCartControl.totalItemPrice}" />
 				<h:panelGrid columns="2" cellpadding="10">
 						<p:commandButton value="Concluir pedido"
 								actionListener="#{shoopingCartControl.confirmOrder}"

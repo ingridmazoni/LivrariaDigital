@@ -24,6 +24,7 @@ public class Book {
 	private List<Category> category;
 	private String coverDirectory;
 	private String categories;
+	private Integer quantity = 1;
 	private UploadedFile image;
 
 	public List<Autor> getAutorList() {
@@ -168,6 +169,14 @@ public class Book {
 
 	public void setImage(UploadedFile image) {
 		this.image = image;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 
 }

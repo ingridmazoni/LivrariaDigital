@@ -20,7 +20,7 @@
 				<ui:include src="Menu.xhtml" />
 		</ui:insert>
 		<p:growl id="growl" life="2000" />
-		<p:tabView>
+		<p:tabView id="tab_view"> 
 				<p:tab id="tab_create" title="Cadastrar livro">
 						<h:form id="create" enctype="multipart/form-data">
 								<p:layout style="min-width:200px;min-height:700px;">
@@ -139,7 +139,7 @@
 										</p:layoutUnit>
 								</p:layout>
 								<p:commandButton value="Adicionar"
-										update="growl j_idt19:remove:book_table j_idt19:update:book_table_update"
+										update="growl tab_view:remove:book_table tab_view:update:book_table_update"
 										actionListener="#{bookControl.createBook}" />
 						</h:form>
 				</p:tab>
@@ -160,7 +160,7 @@
 														<p:commandButton value="Remover" style="margin-left: 40%"
 																icon="ui-icon-trash"
 																actionListener="#{bookControl.removeBook(book)}"
-																update="book_table" />
+																update="book_table tab_view:update:book_table_update" />
 												</p:column>
 										</p:dataTable>
 								</h:panelGrid>
@@ -183,7 +183,7 @@
 														<p:commandButton value="Selecionar"
 																style="margin-left: 40%"
 																actionListener="#{bookControl.loadUpdateBook(book)}"
-																update="j_idt19:update2:panel_update" />
+																update="tab_view:update2:panel_update tab_view:update2:panel_update2" />
 												</p:column>
 										</p:dataTable>
 								</h:panelGrid>
@@ -306,7 +306,7 @@
 								</p:layout>
 								<p:commandButton value="Alterar"
 										actionListener="#{bookControl.updateBook()}"
-										update="j_idt19:update:book_table_update growl" />
+										update="tab_view:update:book_table_update growl" />
 						</h:form>
 				</p:tab>
 		</p:tabView>
