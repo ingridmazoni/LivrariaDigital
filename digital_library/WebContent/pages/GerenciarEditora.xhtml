@@ -13,13 +13,13 @@
 		<title>Gerenciamento de editores</title>
 </h:head>
 <h:body>
-    <ui:insert name="header">
-        <ui:include src="Header.xhtml" />
-    </ui:insert>
-    <ui:insert name="content">
-        <ui:include src="Menu.xhtml" />
-    </ui:insert>
-		<p:tabView>
+		<ui:insert name="header">
+				<ui:include src="Header.xhtml" />
+		</ui:insert>
+		<ui:insert name="content">
+				<ui:include src="Menu.xhtml" />
+		</ui:insert>
+		<p:tabView id="tab_view_editor">
 				<p:tab title="Cadastrar Editora">
 						<h:form id="Cadastrar">
 								<p:growl id="growl" life="2000" />
@@ -48,12 +48,12 @@
 										<p:outputLabel for="cnpj" value="CNPJ:  "></p:outputLabel>
 										<p:inputText id="cnpj" value="#{editorControl.editor.cnpj}" />
 								</h:panelGrid>
-								<p:commandButton value="Adicionar" update="growl"
+								<p:commandButton value="Adicionar" update="growl tab_view_editor:remove:editor_table tab_view_editor:remove:editor_table_update tab_view_editor:fetch:editor_table_fetch"
 										actionListener="#{editorControl.createEditor()}" />
 						</h:form>
 				</p:tab>
 				<p:tab title="Remover Editora">
-						<h:form id="Remover">
+						<h:form id="remove">
 								<p:commandLink id="nonAjax"
 										actionListener="#{editorControl.refreshEditorList}"
 										update="editor_table">
@@ -75,10 +75,21 @@
 														<p:commandButton value="Remover" style="margin-left: 40%"
 																icon="ui-icon-trash"
 																actionListener="#{editorControl.removeEditor(editor)}"
-																update="editor_table" />
+																update="editor_table">
+																<p:confirm header="Confirmar Remocao"
+																		message="Voce tem certeza que deseja remover #{editor.name}?"
+																		icon="ui-icon-alert" />
+														</p:commandButton>
 												</p:column>
 										</p:dataTable>
 								</h:panelGrid>
+								<p:confirmDialog global="true" showEffect="fade"
+										hideEffect="fade">
+										<p:commandButton value="Sim" type="button"
+												styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+										<p:commandButton value="Nao" type="button"
+												styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
 						</h:form>
 				</p:tab>
 				<p:tab title="Alterar Editora">
@@ -163,18 +174,18 @@
 												<p:column headerText="Rua">
 														<h:outputText value="#{editor.address.streetName}" />
 												</p:column>
-                        <p:column headerText="Número">
-                            <h:outputText value="#{editor.address.buildingNumber}" />
-                        </p:column>												
-                        <p:column headerText="Cidade">
-                            <h:outputText value="#{editor.address.city}" />
-                        </p:column>
-                        <p:column headerText="Estado">
-                            <h:outputText value="#{editor.address.state}" />
-                        </p:column> 
-                        <p:column headerText="Telefone">
-                            <h:outputText value="#{editor.phoneNumber}" />
-                        </p:column>  
+												<p:column headerText="Número">
+														<h:outputText value="#{editor.address.buildingNumber}" />
+												</p:column>
+												<p:column headerText="Cidade">
+														<h:outputText value="#{editor.address.city}" />
+												</p:column>
+												<p:column headerText="Estado">
+														<h:outputText value="#{editor.address.state}" />
+												</p:column>
+												<p:column headerText="Telefone">
+														<h:outputText value="#{editor.phoneNumber}" />
+												</p:column>
 										</p:dataTable>
 								</h:panelGrid>
 						</h:form>

@@ -56,6 +56,9 @@ CREATE TABLE library.category(
   PRIMARY KEY(category_id)
 );
 
+ALTER TABLE library.category
+ADD UNIQUE (category_name);
+
 INSERT INTO library.category(category_name) VALUES ('ROMANCE');
 INSERT INTO library.category(category_name) VALUES ('TECNOLOGIA');  
 

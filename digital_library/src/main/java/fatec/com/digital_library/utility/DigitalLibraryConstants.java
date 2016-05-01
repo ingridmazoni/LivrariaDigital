@@ -6,6 +6,12 @@ public final class DigitalLibraryConstants {
 	public static final String HARDCOVER = "Capa dura";
 	public static final String ADD_BOOK_FAILURE = "Houve falha em adicionar livro";
 	public static final String ADD_BOOK_SUCCESS = "Livro adicionado com sucesso";
+	public static final String ADD_CATEGORY_SUCCESS = "Categoria adicionada com sucesso";
+	public static final String ADD_CATEGORY_FAILURE = "Houve falha em adicionar categoria";
+	public static final String REMOVE_CATEGORY_SUCCESS = "Categoria removida com sucesso";
+	public static final String REMOVE_CATEGORY_FAILURE = "Houve falha em remover categoria";
+	public static final String UPDATE_CATEGORY_SUCCESS = "Categoria alterada com sucesso";
+	public static final String UPDATE_CATEGORY_FAILURE = "Houve falha em alterar categoria";
 	public static final String REMOVE_BOOK_SUCCESS = "Livro removido com sucesso";
 	public static final String REMOVE_BOOK_FAILURE = "Houve falha em remover livro";
 	public static final String UPDATE_BOOK_SUCCESS = "Livro alterado com sucesso";
