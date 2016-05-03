@@ -20,6 +20,7 @@ import fatec.com.digital_library.entity.Autor;
 import fatec.com.digital_library.entity.Book;
 import fatec.com.digital_library.entity.Category;
 import fatec.com.digital_library.entity.Editor;
+import fatec.com.digital_library.utility.CityStateLoader;
 import fatec.com.digital_library.utility.DigitalLibraryConstants;
 
 @ManagedBean(name = "loader", eager = true)
@@ -40,6 +41,8 @@ public class Loader implements Serializable {
 	private List<Category> categoryList;
 	private List<Autor> autorList;
 	private List<Book> bookList;
+	private List<String> cityList;
+	private List<String> stateList;
 
 	@PostConstruct
 	public void onLoad() {
@@ -48,6 +51,9 @@ public class Loader implements Serializable {
 		categoryList = categoryDAO.fetchAllCategories();
 		autorList = autorDAO.fetchAutors();
 		bookList = bookDAO.fetchBooks();
+		CityStateLoader cityStateLoader = new CityStateLoader();
+		cityList = cityStateLoader.loadCity();
+		stateList = cityStateLoader.loadState();
 
 	}
 
@@ -111,6 +117,22 @@ public class Loader implements Serializable {
 
 	public void setBookList(List<Book> bookList) {
 		this.bookList = bookList;
+	}
+
+	public List<String> getCityList() {
+		return cityList;
+	}
+
+	public void setCityList(List<String> cityList) {
+		this.cityList = cityList;
+	}
+
+	public List<String> getStateList() {
+		return stateList;
+	}
+
+	public void setStateList(List<String> stateList) {
+		this.stateList = stateList;
 	}
 	
 }
