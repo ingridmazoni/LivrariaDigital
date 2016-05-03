@@ -73,6 +73,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 			if (ps.executeUpdate() > 0) {
 				ps.close();
 				con.commit();
+				con.close();
 				return true;
 			} else {
 				return false;
@@ -177,6 +178,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 			if (ps.executeUpdate() > 0) {
 				ps.close();
 				con.commit();
+				con.close();
 				return true;
 			}
 		} catch (Exception e) {

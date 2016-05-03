@@ -10,5 +10,6 @@ public interface EditorDAO {
 	public boolean removeEditor(Editor editor);
 	public Editor fetchEditor(Editor editor);
 	public List<Editor> fetchEditors();
+	public boolean updateEditor(Editor editor, String cnpj);
 
 }

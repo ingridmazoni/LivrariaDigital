@@ -21,44 +21,45 @@
 		</ui:insert>
 		<p:tabView id="tab_view_editor">
 				<p:tab title="Cadastrar Editora">
-						<h:form id="Cadastrar">
-								<p:growl id="growl" life="2000" />
+						<p:growl id="growl" life="2000" />
+						<h:form id="create">
 								<h:panelGrid columns="2" cellpadding="10">
 										<p:outputLabel for="name" value="Nome: "></p:outputLabel>
-										<p:inputText id="name" placeholder="Nome:" required="true"
+										<p:inputText id="name" placeholder="Nome" required="true"
 												type="text" value="#{editorControl.editor.name}"></p:inputText>
 										<p:outputLabel for="street" value="Rua: "></p:outputLabel>
 										<p:inputText id="street"
-												value="#{editorControl.editor.address.streetName}" />
+												value="#{editorControl.address.streetName}" />
 										<p:outputLabel for="building_number" value="Número:  "></p:outputLabel>
 										<p:inputText id="building_number"
-												value="#{editorControl.editor.address.buildingNumber}" />
+												value="#{editorControl.address.buildingNumber}" />
 										<p:outputLabel for="area_code" value="CEP:   "></p:outputLabel>
-										<p:inputText id="area_code"
-												value="#{editorControl.editor.address.areaCode}" />
+										<p:inputMask id="area_code" required="true"
+												value="#{editorControl.address.areaCode}" mask="99-999-999" />
 										<p:outputLabel for="state" value="Estado:   "></p:outputLabel>
-										<p:inputText id="state"
-												value="#{editorControl.editor.address.state}" />
+										<p:autoComplete id="state" maxResults="10"
+												value="#{editorControl.address.state}"
+												completeMethod="#{editorControl.completeState}" />
 										<p:outputLabel for="city" value="Cidade:   "></p:outputLabel>
-										<p:inputText id="city"
-												value="#{editorControl.editor.address.city}" />
+										<p:autoComplete id="city" maxResults="10"
+												value="#{editorControl.address.city}"
+												completeMethod="#{editorControl.completeCity}" />
 										<p:outputLabel for="phone" value="Telefone:  "></p:outputLabel>
-										<p:inputText id="phone"
-												value="#{editorControl.editor.phoneNumber}" />
+										<p:inputMask id="phone" required="true"
+												value="#{editorControl.editor.phoneNumber}"
+												mask="(99)9999-9999" />
 										<p:outputLabel for="cnpj" value="CNPJ:  "></p:outputLabel>
-										<p:inputText id="cnpj" value="#{editorControl.editor.cnpj}" />
+										<p:inputMask id="cnpj" required="true"
+												value="#{editorControl.editor.cnpj}"
+												mask="99.999.999/9999-99" />
 								</h:panelGrid>
-								<p:commandButton value="Adicionar" update="growl tab_view_editor:remove:editor_table tab_view_editor:remove:editor_table_update tab_view_editor:fetch:editor_table_fetch"
-										actionListener="#{editorControl.createEditor()}" />
+								<p:commandButton value="Adicionar"
+										update="tab_view_editor:growl tab_view_editor:remove:editor_table tab_view_editor:update:editor_table_update tab_view_editor:fetch:editor_table_fetch"
+										actionListener="#{editorControl.createEditor(editorControl.editor)}" />
 						</h:form>
 				</p:tab>
 				<p:tab title="Remover Editora">
 						<h:form id="remove">
-								<p:commandLink id="nonAjax"
-										actionListener="#{editorControl.refreshEditorList}"
-										update="editor_table">
-										<h:outputText value="Atualizar" />
-								</p:commandLink>
 								<h:panelGrid columns="2" cellpadding="10">
 										<p:dataTable id="editor_table" var="editor"
 												value="#{editorControl.editorList}" rows="10"
@@ -75,7 +76,7 @@
 														<p:commandButton value="Remover" style="margin-left: 40%"
 																icon="ui-icon-trash"
 																actionListener="#{editorControl.removeEditor(editor)}"
-																update="editor_table">
+																update="tab_view_editor:growl tab_view_editor:remove:editor_table tab_view_editor:update:editor_table_update tab_view_editor:fetch:editor_table_fetch">
 																<p:confirm header="Confirmar Remocao"
 																		message="Voce tem certeza que deseja remover #{editor.name}?"
 																		icon="ui-icon-alert" />
@@ -94,11 +95,6 @@
 				</p:tab>
 				<p:tab title="Alterar Editora">
 						<h:form id="update">
-								<p:commandLink id="nonAjax"
-										actionListener="#{bookControl.refreshBookList}"
-										update="editor_table_update">
-										<h:outputText value="Atualizar" />
-								</p:commandLink>
 								<h:panelGrid columns="2" cellpadding="10">
 										<p:dataTable id="editor_table_update" var="editor"
 												value="#{editorControl.editorList}" rows="10"
@@ -115,12 +111,12 @@
 														<p:commandButton value="Selecionar"
 																style="margin-left: 40%"
 																actionListener="#{editorControl.loadUpdateEditor(editor)}"
-																update="j_idt7:j_idt60:panel_update" />
+																update="tab_view_editor:update2:panel_update" />
 												</p:column>
 										</p:dataTable>
 								</h:panelGrid>
 						</h:form>
-						<h:form>
+						<h:form id="update2">
 								<p:growl id="growl2" life="2000" />
 								<h:panelGrid id="panel_update" columns="2" cellpadding="10">
 										<p:outputLabel for="name" value="Nome: "></p:outputLabel>
@@ -133,32 +129,33 @@
 										<p:inputText id="building_number"
 												value="#{editorControl.editor.address.buildingNumber}" />
 										<p:outputLabel for="area_code" value="CEP:   "></p:outputLabel>
-										<p:inputText id="area_code"
-												value="#{editorControl.editor.address.areaCode}" />
-										<p:outputLabel for="state" value="Estado:   "></p:outputLabel>
-										<p:inputText id="state"
-												value="#{editorControl.editor.address.state}" />
-										<p:outputLabel for="city" value="Cidade:   "></p:outputLabel>
-										<p:inputText id="city"
-												value="#{editorControl.editor.address.city}" />
+										<p:inputMask id="area_code" required="true"
+												value="#{editorControl.editor.address.areaCode}"
+												mask="99-999-999" />
+                    <p:outputLabel for="state" value="Estado:   "></p:outputLabel>
+                    <p:autoComplete id="state" maxResults="10"
+                        value="#{editorControl.editor.address.state}"
+                        completeMethod="#{editorControl.completeState}" />
+                    <p:outputLabel for="city" value="Cidade:   "></p:outputLabel>
+                    <p:autoComplete id="city" maxResults="10"
+                        value="#{editorControl.editor.address.city}"
+                        completeMethod="#{editorControl.completeCity}" />
 										<p:outputLabel for="phone" value="Telefone:  "></p:outputLabel>
-										<p:inputText id="phone"
-												value="#{editorControl.editor.phoneNumber}" />
+										<p:inputMask id="phone" required="true"
+												value="#{editorControl.editor.phoneNumber}"
+												mask="(99)9999-9999" />
 										<p:outputLabel for="cnpj" value="CNPJ:  "></p:outputLabel>
-										<p:inputText id="cnpj" value="#{editorControl.editor.cnpj}" />
+										<p:inputMask id="cnpj" required="true"
+												value="#{editorControl.editor.cnpj}"
+												mask="99.999.999/9999-99" />
 								</h:panelGrid>
 								<p:commandButton value="Alterar" style="margin-left:11px"
-										actionListener="#{editorControl.updateEditor}"
-										update="j_idt19:update:editor_table_update" />
+										actionListener="#{editorControl.alterEditor(editorControl.editor, editorControl.oldCnpj)}"
+										update="tab_view_editor:growl tab_view_editor:remove:editor_table tab_view_editor:update:editor_table_update tab_view_editor:fetch:editor_table_fetch" />
 						</h:form>
 				</p:tab>
 				<p:tab title="Buscar Editora">
-						<h:form id="Buscar">
-								<p:commandLink id="nonAjax"
-										actionListener="#{editorControl.refreshEditorList}"
-										update="editor_table_fetch">
-										<h:outputText value="Atualizar" />
-								</p:commandLink>
+						<h:form id="fetch">
 								<h:panelGrid columns="2" cellpadding="10">
 										<p:dataTable id="editor_table_fetch" var="editor"
 												value="#{editorControl.editorList}" rows="10"

@@ -6,12 +6,18 @@ public final class DigitalLibraryConstants {
 	public static final String HARDCOVER = "Capa dura";
 	public static final String ADD_BOOK_FAILURE = "Houve falha em adicionar livro";
 	public static final String ADD_BOOK_SUCCESS = "Livro adicionado com sucesso";
+	public static final String ADD_EDITOR_FAILURE = "Houve falha em adicionar editora";
+	public static final String ADD_EDITOR_SUCCESS = "Editora adicionada com sucesso";	
 	public static final String ADD_CATEGORY_SUCCESS = "Categoria adicionada com sucesso";
 	public static final String ADD_CATEGORY_FAILURE = "Houve falha em adicionar categoria";
 	public static final String REMOVE_CATEGORY_SUCCESS = "Categoria removida com sucesso";
 	public static final String REMOVE_CATEGORY_FAILURE = "Houve falha em remover categoria";
+	public static final String REMOVE_EDITOR_SUCCESS = "Editora removida com sucesso";
+	public static final String REMOVE_EDITOR_FAILURE = "Houve falha em remover editora";	
 	public static final String UPDATE_CATEGORY_SUCCESS = "Categoria alterada com sucesso";
 	public static final String UPDATE_CATEGORY_FAILURE = "Houve falha em alterar categoria";
+	public static final String UPDATE_EDITOR_SUCCESS = "Editora alterada com sucesso";
+	public static final String UPDATE_EDITOR_FAILURE = "Houve falha em alterar Editora";	
 	public static final String REMOVE_BOOK_SUCCESS = "Livro removido com sucesso";
 	public static final String REMOVE_BOOK_FAILURE = "Houve falha em remover livro";
 	public static final String UPDATE_BOOK_SUCCESS = "Livro alterado com sucesso";
@@ -31,4 +37,5 @@ public final class DigitalLibraryConstants {
 	public static final String UPLOAD_SUCCESS = "Upload foi realizado com sucesso";
 	public static final String UPLOAD_FAILURE = "Houve falha no upload da imagem";
 	public static final String NO_STOCK_ERROR_MSG = "Livro indisponivel no momento";
+	public static final String EDITOR_EXISTS_ERROR = "CNPJ e/ou nome ja cadastrados no sistema";
 }
